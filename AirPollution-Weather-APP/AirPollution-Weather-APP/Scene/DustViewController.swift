@@ -24,7 +24,6 @@ final class DustViewController: UIViewController {
         let label = UILabel()
         label.text = ""
         label.font = .systemFont(ofSize: 200.0, weight: .bold)
-        label.textColor = .systemBlue
         
         return label
     }()
@@ -56,17 +55,30 @@ private extension DustViewController {
     func setupNetworkDatas() {
         networkManager.fetchAirPollutionData { result in
             switch result {
-            case Result.success(let airPollutonData):
-                self.airPollutonData = airPollutonData
+            case Result.success(let airPollutonValueData):
+                self.airPollutonData = airPollutonValueData
                 
                 DispatchQueue.main.async {
-                    self.nameLabel.text = String(lroundl(self.airPollutonData.v))
-                    print(lroundl(airPollutonData.v))
+                    let airPollutonValueData = lroundl(self.airPollutonData.v)
+                    self.nameLabel.text = String(airPollutonValueData)
+                    self.nameLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                 }
             
             case Result.failure(let error):
                 print(error.localizedDescription)
             }
+        }
+    }
+    
+    func currentAirPollutionStatus(_ airPollutionValue: Int) -> AirPollutionDataStatus {
+        if airPollutionValue <= 30 {
+            return AirPollutionDataStatus.good
+        } else if airPollutionValue <= 50 {
+            return AirPollutionDataStatus.soso
+        } else if airPollutionValue <= 100 {
+            return AirPollutionDataStatus.bad
+        } else {
+            return AirPollutionDataStatus.veryBad
         }
     }
 }
