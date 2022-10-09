@@ -14,6 +14,7 @@
 		0A2D1DB628F3181D0065B6DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A2D1DB428F3181D0065B6DC /* LaunchScreen.storyboard */; };
 		0A2D1DBF28F321990065B6DC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A2D1DBE28F321990065B6DC /* SnapKit */; };
 		0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */; };
+		0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D328F332B000C1AB50 /* NetworkError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		0A2D1DB528F3181D0065B6DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A2D1DB728F3181D0065B6DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPollutionApiModel.swift; sourceTree = "<group>"; };
+		0A7F98D328F332B000C1AB50 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				0A2D1DA928F3181C0065B6DC /* AppDelegate.swift */,
 				0A2D1DAB28F3181C0065B6DC /* SceneDelegate.swift */,
 				0A2D1DC128F330C50065B6DC /* Model */,
+				0A7F98D228F3329D00C1AB50 /* Network */,
 				0A2D1DC028F324990065B6DC /* Scene */,
 				0A2D1DB228F3181D0065B6DC /* Assets.xcassets */,
 				0A2D1DB428F3181D0065B6DC /* LaunchScreen.storyboard */,
@@ -83,6 +86,14 @@
 				0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		0A7F98D228F3329D00C1AB50 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				0A7F98D328F332B000C1AB50 /* NetworkError.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +176,7 @@
 				0A2D1DAA28F3181C0065B6DC /* AppDelegate.swift in Sources */,
 				0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */,
 				0A2D1DAC28F3181C0065B6DC /* SceneDelegate.swift in Sources */,
+				0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
