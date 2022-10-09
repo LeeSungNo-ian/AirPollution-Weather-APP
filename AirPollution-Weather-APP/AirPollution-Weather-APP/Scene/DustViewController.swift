@@ -58,10 +58,9 @@ private extension DustViewController {
             switch result {
             case Result.success(let airPollutonData):
                 self.airPollutonData = airPollutonData
-                print("데이터를 제대로 받았음")
                 
                 DispatchQueue.main.async {
-                    self.nameLabel.text = String(self.airPollutonData.v)
+                    self.nameLabel.text = String(lroundl(self.airPollutonData.v))
                     print(lroundl(airPollutonData.v))
                 }
             
