@@ -46,7 +46,7 @@ final class DustViewController: UIViewController {
 private extension DustViewController {
     
     func setupLayout() {
-        [backgroundView, nameLabel, bottomSheetView].forEach { view.addSubview($0) }
+        [backgroundView, nameLabel].forEach { view.addSubview($0) }
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -57,10 +57,6 @@ private extension DustViewController {
         
         nameLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
-        }
-        
-        bottomSheetView.snp.makeConstraints {
-          $0.edges.equalToSuperview()
         }
     }
     
@@ -75,6 +71,11 @@ private extension DustViewController {
                     self.nameLabel.text = String(airPollutonValueData)
                     self.nameLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
+                    
+                    self.view.addSubview(self.bottomSheetView)
+                    self.bottomSheetView.snp.makeConstraints {
+                      $0.edges.equalToSuperview()
+                    }
                 }
             
             case Result.failure(let error):
