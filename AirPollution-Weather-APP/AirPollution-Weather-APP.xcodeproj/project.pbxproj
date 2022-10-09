@@ -15,6 +15,7 @@
 		0A2D1DBF28F321990065B6DC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A2D1DBE28F321990065B6DC /* SnapKit */; };
 		0A739EAC28F3639800E629E8 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A739EAB28F3639800E629E8 /* PassThroughView.swift */; };
 		0A739EAE28F363BF00E629E8 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */; };
+		0A739EB128F3691800E629E8 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A739EB028F3691800E629E8 /* UIColor+.swift */; };
 		0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */; };
 		0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D328F332B000C1AB50 /* NetworkError.swift */; };
 		0A7F98D628F3330600C1AB50 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D528F3330600C1AB50 /* NetworkManager.swift */; };
@@ -33,6 +34,7 @@
 		0A2D1DB728F3181D0065B6DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A739EAB28F3639800E629E8 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
+		0A739EB028F3691800E629E8 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPollutionApiModel.swift; sourceTree = "<group>"; };
 		0A7F98D328F332B000C1AB50 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		0A7F98D528F3330600C1AB50 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			children = (
 				0A2D1DA928F3181C0065B6DC /* AppDelegate.swift */,
 				0A2D1DAB28F3181C0065B6DC /* SceneDelegate.swift */,
+				0A739EAF28F3690100E629E8 /* Extension */,
 				0A2D1DC128F330C50065B6DC /* Model */,
 				0A7F98D228F3329D00C1AB50 /* Network */,
 				0A2D1DC028F324990065B6DC /* Scene */,
@@ -88,8 +91,8 @@
 			isa = PBXGroup;
 			children = (
 				0A2D1DAD28F3181C0065B6DC /* DustViewController.swift */,
-				0A739EAB28F3639800E629E8 /* PassThroughView.swift */,
 				0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */,
+				0A739EAB28F3639800E629E8 /* PassThroughView.swift */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -102,6 +105,14 @@
 				0A7F98D728F3342E00C1AB50 /* RequestURL + APIKey */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		0A739EAF28F3690100E629E8 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				0A739EB028F3691800E629E8 /* UIColor+.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		0A7F98D228F3329D00C1AB50 /* Network */ = {
@@ -203,6 +214,7 @@
 				0A7F98DB28F3349D00C1AB50 /* APIKey.swift in Sources */,
 				0A739EAC28F3639800E629E8 /* PassThroughView.swift in Sources */,
 				0A2D1DAA28F3181C0065B6DC /* AppDelegate.swift in Sources */,
+				0A739EB128F3691800E629E8 /* UIColor+.swift in Sources */,
 				0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */,
 				0A7F98D928F3345200C1AB50 /* RequestURL.swift in Sources */,
 				0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */,

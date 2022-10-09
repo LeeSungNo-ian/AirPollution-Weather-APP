@@ -15,8 +15,8 @@ final class DustViewController: UIViewController {
 
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
-        view.bottomSheetColor = .lightGray
-        view.barViewColor = .darkGray
+        view.bottomSheetColor = .bottomSheetBackGroundColor
+        view.barViewColor = .bottomSheetBarViewColor
         
         return view
     }()
@@ -97,7 +97,7 @@ private extension DustViewController {
     }
     
     func setupBlurEffect(_ airPollutionValue: Double) {
-        let blurEffect = UIBlurEffect(style: .systemMaterialDark)
+        let blurEffect = UIBlurEffect(style: .dark)
         let visualEffectView = UIVisualEffectView(effect: blurEffect)
         visualEffectView.alpha = airPollutionValue
         visualEffectView.frame = view.frame

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class BottomSheetView: PassThroughView {
-    // MARK: Constants
+
     enum Mode {
         case tip
         case full
@@ -19,7 +19,7 @@ final class BottomSheetView: PassThroughView {
         static let duration = 0.5
         static let cornerRadius = 12.0
         static let barViewTopSpacing = 5.0
-        static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.2, height: 5.0)
+        static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.1, height: 6.0)
         static let bottomSheetRatio: (Mode) -> Double = { mode in
             switch mode {
             case .tip:
@@ -37,14 +37,14 @@ final class BottomSheetView: PassThroughView {
     // MARK: UI
     let bottomSheetView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray
+        
         return view
     }()
     
     private let barView: UIView = {
         let view = UIView()
-        view.backgroundColor = .darkGray
         view.isUserInteractionEnabled = false
+        
         return view
     }()
     
@@ -95,6 +95,8 @@ final class BottomSheetView: PassThroughView {
             $0.top.equalTo(Const.bottomSheetYPosition(.tip))
         }
         
+        self.barView.layer.cornerRadius = 3
+        self.barView.clipsToBounds = true
         self.barView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(Const.barViewTopSpacing)
