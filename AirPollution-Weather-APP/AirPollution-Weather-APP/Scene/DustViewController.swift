@@ -13,6 +13,14 @@ final class DustViewController: UIViewController {
     var networkManager = NetworkManager()
     var airPollutonData: Co = Co(v: 0.0)
 
+    private let bottomSheetView: BottomSheetView = {
+        let view = BottomSheetView()
+        view.bottomSheetColor = .bottomSheetBackGroundColor
+        view.barViewColor = .bottomSheetBarViewColor
+        
+        return view
+    }()
+    
     private lazy var backgroundView: UIView = {
         let backgroundView = UIView()
         backgroundView.backgroundColor = .black
@@ -63,6 +71,11 @@ private extension DustViewController {
                     self.nameLabel.text = String(airPollutonValueData)
                     self.nameLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
+                    
+                    self.view.addSubview(self.bottomSheetView)
+                    self.bottomSheetView.snp.makeConstraints {
+                      $0.edges.equalToSuperview()
+                    }
                 }
             
             case Result.failure(let error):
@@ -84,7 +97,7 @@ private extension DustViewController {
     }
     
     func setupBlurEffect(_ airPollutionValue: Double) {
-        let blurEffect = UIBlurEffect(style: .systemMaterialDark)
+        let blurEffect = UIBlurEffect(style: .dark)
         let visualEffectView = UIVisualEffectView(effect: blurEffect)
         visualEffectView.alpha = airPollutionValue
         visualEffectView.frame = view.frame
