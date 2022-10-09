@@ -32,7 +32,6 @@ final class DustViewController: UIViewController {
         super.viewDidLoad()
         setupLayout()
         setupNetworkDatas()
-        setupBlurEffect()
     }
 }
 
@@ -63,6 +62,7 @@ private extension DustViewController {
                     let airPollutonValueData = lroundl(self.airPollutonData.v)
                     self.nameLabel.text = String(airPollutonValueData)
                     self.nameLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
+                    self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
                 }
             
             case Result.failure(let error):
@@ -72,21 +72,21 @@ private extension DustViewController {
     }
     
     func currentAirPollutionStatus(_ airPollutionValue: Int) -> AirPollutionDataStatus {
-        if airPollutionValue <= 30 {
+        if airPollutionValue <= 15 {
             return AirPollutionDataStatus.good
-        } else if airPollutionValue <= 50 {
+        } else if airPollutionValue <= 35 {
             return AirPollutionDataStatus.soso
-        } else if airPollutionValue <= 100 {
+        } else if airPollutionValue <= 75 {
             return AirPollutionDataStatus.bad
         } else {
             return AirPollutionDataStatus.veryBad
         }
     }
     
-    func setupBlurEffect() {
+    func setupBlurEffect(_ airPollutionValue: Double) {
         let blurEffect = UIBlurEffect(style: .systemMaterialDark)
         let visualEffectView = UIVisualEffectView(effect: blurEffect)
-        visualEffectView.alpha = 0.95
+        visualEffectView.alpha = airPollutionValue
         visualEffectView.frame = view.frame
         view.addSubview(visualEffectView)
     }

@@ -21,4 +21,13 @@ enum AirPollutionDataStatus: String {
         case .veryBad: return UIColor.systemRed
         }
     }
+    
+    var statusBlurAlpha: Double {
+        switch self {
+        case .good: return 0.5
+        case .soso: return 0.6
+        case .bad: return 0.8
+        case .veryBad: return 0.95
+        }
+    }
 }
