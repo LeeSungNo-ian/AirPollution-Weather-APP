@@ -13,6 +13,14 @@ final class DustViewController: UIViewController {
     var networkManager = NetworkManager()
     var airPollutonData: Co = Co(v: 0.0)
 
+    private let bottomSheetView: BottomSheetView = {
+        let view = BottomSheetView()
+        view.bottomSheetColor = .lightGray
+        view.barViewColor = .darkGray
+        
+        return view
+    }()
+    
     private lazy var backgroundView: UIView = {
         let backgroundView = UIView()
         backgroundView.backgroundColor = .black
@@ -38,7 +46,7 @@ final class DustViewController: UIViewController {
 private extension DustViewController {
     
     func setupLayout() {
-        [backgroundView, nameLabel].forEach { view.addSubview($0) }
+        [backgroundView, nameLabel, bottomSheetView].forEach { view.addSubview($0) }
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -49,6 +57,10 @@ private extension DustViewController {
         
         nameLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
+        }
+        
+        bottomSheetView.snp.makeConstraints {
+          $0.edges.equalToSuperview()
         }
     }
     

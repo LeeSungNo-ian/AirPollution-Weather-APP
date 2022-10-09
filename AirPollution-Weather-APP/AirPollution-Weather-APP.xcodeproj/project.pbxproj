@@ -13,6 +13,8 @@
 		0A2D1DB328F3181D0065B6DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A2D1DB228F3181D0065B6DC /* Assets.xcassets */; };
 		0A2D1DB628F3181D0065B6DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A2D1DB428F3181D0065B6DC /* LaunchScreen.storyboard */; };
 		0A2D1DBF28F321990065B6DC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A2D1DBE28F321990065B6DC /* SnapKit */; };
+		0A739EAC28F3639800E629E8 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A739EAB28F3639800E629E8 /* PassThroughView.swift */; };
+		0A739EAE28F363BF00E629E8 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */; };
 		0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */; };
 		0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D328F332B000C1AB50 /* NetworkError.swift */; };
 		0A7F98D628F3330600C1AB50 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D528F3330600C1AB50 /* NetworkManager.swift */; };
@@ -29,6 +31,8 @@
 		0A2D1DB228F3181D0065B6DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A2D1DB528F3181D0065B6DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A2D1DB728F3181D0065B6DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0A739EAB28F3639800E629E8 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
+		0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
 		0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPollutionApiModel.swift; sourceTree = "<group>"; };
 		0A7F98D328F332B000C1AB50 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		0A7F98D528F3330600C1AB50 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -84,6 +88,8 @@
 			isa = PBXGroup;
 			children = (
 				0A2D1DAD28F3181C0065B6DC /* DustViewController.swift */,
+				0A739EAB28F3639800E629E8 /* PassThroughView.swift */,
+				0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -195,10 +201,12 @@
 				0A7F98D628F3330600C1AB50 /* NetworkManager.swift in Sources */,
 				0A2D1DAE28F3181C0065B6DC /* DustViewController.swift in Sources */,
 				0A7F98DB28F3349D00C1AB50 /* APIKey.swift in Sources */,
+				0A739EAC28F3639800E629E8 /* PassThroughView.swift in Sources */,
 				0A2D1DAA28F3181C0065B6DC /* AppDelegate.swift in Sources */,
 				0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */,
 				0A7F98D928F3345200C1AB50 /* RequestURL.swift in Sources */,
 				0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */,
+				0A739EAE28F363BF00E629E8 /* BottomSheetView.swift in Sources */,
 				0A2D1DAC28F3181C0065B6DC /* SceneDelegate.swift in Sources */,
 				0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */,
 			);
