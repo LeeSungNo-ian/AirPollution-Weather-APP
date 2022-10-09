@@ -18,7 +18,7 @@
 		0A7F98D628F3330600C1AB50 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D528F3330600C1AB50 /* NetworkManager.swift */; };
 		0A7F98D928F3345200C1AB50 /* RequestURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D828F3345200C1AB50 /* RequestURL.swift */; };
 		0A7F98DB28F3349D00C1AB50 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DA28F3349D00C1AB50 /* APIKey.swift */; };
-		0A7F98E028F3437900C1AB50 /* AirPollutionDataRange .swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DF28F3437900C1AB50 /* AirPollutionDataRange .swift */; };
+		0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,7 +34,7 @@
 		0A7F98D528F3330600C1AB50 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		0A7F98D828F3345200C1AB50 /* RequestURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestURL.swift; sourceTree = "<group>"; };
 		0A7F98DA28F3349D00C1AB50 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
-		0A7F98DF28F3437900C1AB50 /* AirPollutionDataRange .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AirPollutionDataRange .swift"; sourceTree = "<group>"; };
+		0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPollutionDataStatus.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */,
-				0A7F98DF28F3437900C1AB50 /* AirPollutionDataRange .swift */,
+				0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */,
 				0A7F98D728F3342E00C1AB50 /* RequestURL + APIKey */,
 			);
 			path = Model;
@@ -198,7 +198,7 @@
 				0A2D1DAA28F3181C0065B6DC /* AppDelegate.swift in Sources */,
 				0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */,
 				0A7F98D928F3345200C1AB50 /* RequestURL.swift in Sources */,
-				0A7F98E028F3437900C1AB50 /* AirPollutionDataRange .swift in Sources */,
+				0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */,
 				0A2D1DAC28F3181C0065B6DC /* SceneDelegate.swift in Sources */,
 				0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */,
 			);

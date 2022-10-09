@@ -32,6 +32,7 @@ final class DustViewController: UIViewController {
         super.viewDidLoad()
         setupLayout()
         setupNetworkDatas()
+        setupBlurEffect()
     }
 }
 
@@ -80,5 +81,13 @@ private extension DustViewController {
         } else {
             return AirPollutionDataStatus.veryBad
         }
+    }
+    
+    func setupBlurEffect() {
+        let blurEffect = UIBlurEffect(style: .systemMaterialDark)
+        let visualEffectView = UIVisualEffectView(effect: blurEffect)
+        visualEffectView.alpha = 0.95
+        visualEffectView.frame = view.frame
+        view.addSubview(visualEffectView)
     }
 }
