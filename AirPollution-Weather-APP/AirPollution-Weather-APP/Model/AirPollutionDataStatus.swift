@@ -24,7 +24,7 @@ enum AirPollutionDataStatus: String {
     
     var statusBlurAlpha: Double {
         switch self {
-        case .good: return 0.5
+        case .good: return 0.0
         case .soso: return 0.6
         case .bad: return 0.8
         case .veryBad: return 0.95
