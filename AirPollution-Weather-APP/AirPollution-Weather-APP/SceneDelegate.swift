@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         window?.backgroundColor = .clear
-        window?.rootViewController = ViewController()
+        window?.rootViewController = DustViewController()
         window?.makeKeyAndVisible()
     }
 
