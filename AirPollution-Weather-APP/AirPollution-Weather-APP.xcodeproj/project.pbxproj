@@ -15,6 +15,9 @@
 		0A2D1DBF28F321990065B6DC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0A2D1DBE28F321990065B6DC /* SnapKit */; };
 		0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */; };
 		0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D328F332B000C1AB50 /* NetworkError.swift */; };
+		0A7F98D628F3330600C1AB50 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D528F3330600C1AB50 /* NetworkManager.swift */; };
+		0A7F98D928F3345200C1AB50 /* RequestURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D828F3345200C1AB50 /* RequestURL.swift */; };
+		0A7F98DB28F3349D00C1AB50 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DA28F3349D00C1AB50 /* APIKey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +30,9 @@
 		0A2D1DB728F3181D0065B6DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPollutionApiModel.swift; sourceTree = "<group>"; };
 		0A7F98D328F332B000C1AB50 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		0A7F98D528F3330600C1AB50 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		0A7F98D828F3345200C1AB50 /* RequestURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestURL.swift; sourceTree = "<group>"; };
+		0A7F98DA28F3349D00C1AB50 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */,
+				0A7F98D728F3342E00C1AB50 /* RequestURL + APIKey */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -91,9 +98,19 @@
 		0A7F98D228F3329D00C1AB50 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				0A7F98D528F3330600C1AB50 /* NetworkManager.swift */,
 				0A7F98D328F332B000C1AB50 /* NetworkError.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		0A7F98D728F3342E00C1AB50 /* RequestURL + APIKey */ = {
+			isa = PBXGroup;
+			children = (
+				0A7F98D828F3345200C1AB50 /* RequestURL.swift */,
+				0A7F98DA28F3349D00C1AB50 /* APIKey.swift */,
+			);
+			path = "RequestURL + APIKey";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,9 +189,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A7F98D628F3330600C1AB50 /* NetworkManager.swift in Sources */,
 				0A2D1DAE28F3181C0065B6DC /* DustViewController.swift in Sources */,
+				0A7F98DB28F3349D00C1AB50 /* APIKey.swift in Sources */,
 				0A2D1DAA28F3181C0065B6DC /* AppDelegate.swift in Sources */,
 				0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */,
+				0A7F98D928F3345200C1AB50 /* RequestURL.swift in Sources */,
 				0A2D1DAC28F3181C0065B6DC /* SceneDelegate.swift in Sources */,
 				0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */,
 			);
