@@ -11,8 +11,10 @@ final class NetworkManager {
     
     typealias NetworkCompletion = (Result<[List], NetworkError>) -> Void
     
+    var airPollutionURL = ""
+    
     func fetchAirPollutionData(completion: @escaping NetworkCompletion) {
-        let urlString = RequestURL().airPollutionURL + APIKey().apiKey
+        let urlString = self.airPollutionURL + APIKey().apiKey
         performRequest(with: urlString) { result in completion(result) }
     }
     
@@ -23,7 +25,6 @@ final class NetworkManager {
             if error != nil {
                 print(error!)
                 completion(.failure(.networkingError))
-                
                 return
             }
             

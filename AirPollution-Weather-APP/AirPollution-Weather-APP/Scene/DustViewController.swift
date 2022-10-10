@@ -6,12 +6,16 @@
 //
 
 import UIKit
+
 import SnapKit
+import CoreLocation
 
 final class DustViewController: UIViewController {
 
     var networkManager = NetworkManager()
     var airPollutonData: [List]!
+        
+    let locationManager = CLLocationManager()
     
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
@@ -38,8 +42,33 @@ final class DustViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        
+        guard let currentLatitude = locationManager.location?.coordinate.latitude else { return }
+        guard let currentLongitude = locationManager.location?.coordinate.longitude else { return }
+
+        networkManager.airPollutionURL = "https://api.openweathermap.org/data/2.5/air_pollution?lat=\(currentLatitude)&lon=\(currentLongitude)&appid="
+        
         setupLayout()
         setupNetworkDatas()
+        requestGPSPermission()
+    }
+}
+
+extension DustViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.first
+        
+        let latitude = location?.coordinate.latitude
+        let longitude = location?.coordinate.longitude
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("error \(error.localizedDescription)")
     }
 }
 
@@ -102,5 +131,18 @@ private extension DustViewController {
         visualEffectView.alpha = airPollutionValue
         visualEffectView.frame = view.frame
         view.addSubview(visualEffectView)
+    }
+    
+    func requestGPSPermission(){
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedAlways, .authorizedWhenInUse:
+            print("GPS: 권한 있음")
+        case .restricted, .notDetermined:
+            print("GPS: 아직 선택하지 않음")
+        case .denied:
+            print("GPS: 권한 없음")
+        default:
+            print("GPS: Default")
+        }
     }
 }

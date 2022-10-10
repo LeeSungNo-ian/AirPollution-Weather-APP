@@ -15,8 +15,8 @@ struct AirPollutionDatasStruct: Codable {
 
 // MARK: - Coord
 struct Coord: Codable {
-    let lon: Int
-    let lat: Int
+    let lon: Double
+    let lat: Double
 }
 
 // MARK: - List
