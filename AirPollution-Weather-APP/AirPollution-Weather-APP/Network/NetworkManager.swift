@@ -9,7 +9,7 @@ import Foundation
 
 final class NetworkManager {
     
-    typealias NetworkCompletion = (Result<Co, NetworkError>) -> Void
+    typealias NetworkCompletion = (Result<[List], NetworkError>) -> Void
     
     func fetchAirPollutionData(completion: @escaping NetworkCompletion) {
         let urlString = RequestURL().airPollutionURL + APIKey().apiKey
@@ -29,7 +29,6 @@ final class NetworkManager {
             
             guard let safeData = data else {
                 completion(.failure(.dataError))
-                
                 return
             }
             
@@ -43,16 +42,14 @@ final class NetworkManager {
         task.resume()
     }
     
-    private func parseJSON(_ weatherData: Data) -> Co? {
+    private func parseJSON(_ weatherData: Data) -> [List]? {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
             let decodeData = try decoder.decode(AirPollutionDatasStruct.self, from: weatherData)
-            
-            return decodeData.data.iaqi.pm10
+            return decodeData.list
         } catch {
             print(error.localizedDescription)
-            
             return nil
         }
     }
