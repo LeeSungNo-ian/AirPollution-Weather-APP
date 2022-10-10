@@ -11,8 +11,8 @@ import SnapKit
 final class DustViewController: UIViewController {
 
     var networkManager = NetworkManager()
-    var airPollutonData: Co = Co(v: 0.0)
-
+    var airPollutonData: [List]!
+    
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
         view.bottomSheetColor = .bottomSheetBackGroundColor
@@ -67,7 +67,7 @@ private extension DustViewController {
                 self.airPollutonData = airPollutonValueData
                 
                 DispatchQueue.main.async {
-                    let airPollutonValueData = lroundl(self.airPollutonData.v)
+                    let airPollutonValueData = lroundl(self.airPollutonData[0].components["pm10"] ?? 0)
                     self.nameLabel.text = String(airPollutonValueData)
                     self.nameLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
