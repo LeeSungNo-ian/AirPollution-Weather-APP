@@ -34,16 +34,13 @@ final class DustViewController: UIViewController {
     
     private lazy var citynameLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
-        label.font = .systemFont(ofSize: 18.0, weight: .regular)
+        label.font = .systemFont(ofSize: 20.0, weight: .bold)
         
         return label
     }()
     
     private lazy var airPollutionValueLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
-        label.font = .systemFont(ofSize: 220.0, weight: .bold)
         
         return label
     }()
@@ -52,7 +49,7 @@ final class DustViewController: UIViewController {
         super.viewDidLoad()
 
         setupLayout()
-        setupCityname()
+        setupCityName()
         setupNetworkDatas()
         requestGPSPermission()
     }
@@ -86,7 +83,7 @@ private extension DustViewController {
         
         citynameLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(airPollutionValueLabel.snp.top).inset(30.0)
+            $0.bottom.equalTo(airPollutionValueLabel.snp.top).inset(20.0)
         }
         
         airPollutionValueLabel.snp.makeConstraints {
@@ -103,6 +100,15 @@ private extension DustViewController {
                 DispatchQueue.main.async {
                     let airPollutonValueData = lroundl(self.airPollutonData[0].components["pm10"] ?? 0)
                     self.airPollutionValueLabel.text = String(airPollutonValueData)
+                    
+                    if (airPollutonValueData / 100) > 1 {
+                        self.airPollutionValueLabel.font = .systemFont(ofSize: 100.0, weight: .bold)
+                    } else if (airPollutonValueData / 10) > 1 {
+                        self.airPollutionValueLabel.font = .systemFont(ofSize: 200.0, weight: .bold)
+                    } else {
+                        self.airPollutionValueLabel.font = .systemFont(ofSize: 300.0, weight: .bold)
+                    }
+                    
                     self.airPollutionValueLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
                     
@@ -151,7 +157,7 @@ private extension DustViewController {
         }
     }
     
-    func setupCityname() {
+    func setupCityName() {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -167,8 +173,9 @@ private extension DustViewController {
         geocoder.reverseGeocodeLocation(findLocation, preferredLocale: locale, completionHandler: {(placemarks, error) in
             if let address: [CLPlacemark] = placemarks {
                 sleep(1)
-                self.citynameLabel.text = "\(String(address.last?.locality ?? "오류"))의 미세먼지 농도는"
+                self.citynameLabel.text = "\(String(address.last?.locality ?? "오류")) 미세먼지 농도는"
                 self.citynameLabel.textColor = .white
+                UILabel().changeTextWeightSpecificRange(label: self.citynameLabel, fontSize: 20.0, fontWeight: UIFont.Weight.regular, range: "미세먼지 농도는")
             }
         }
         )
