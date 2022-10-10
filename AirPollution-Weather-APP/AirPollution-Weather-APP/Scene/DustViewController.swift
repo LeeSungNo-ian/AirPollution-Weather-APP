@@ -32,10 +32,18 @@ final class DustViewController: UIViewController {
         return backgroundView
     }()
     
-    private lazy var nameLabel: UILabel = {
+    private lazy var citynameLabel: UILabel = {
         let label = UILabel()
         label.text = ""
-        label.font = .systemFont(ofSize: 200.0, weight: .bold)
+        label.font = .systemFont(ofSize: 18.0, weight: .regular)
+        
+        return label
+    }()
+    
+    private lazy var airPollutionValueLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.font = .systemFont(ofSize: 220.0, weight: .bold)
         
         return label
     }()
@@ -43,16 +51,8 @@ final class DustViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        
-        guard let currentLatitude = locationManager.location?.coordinate.latitude else { return }
-        guard let currentLongitude = locationManager.location?.coordinate.longitude else { return }
-
-        networkManager.airPollutionURL = "https://api.openweathermap.org/data/2.5/air_pollution?lat=\(currentLatitude)&lon=\(currentLongitude)&appid="
-        
         setupLayout()
+        setupCityname()
         setupNetworkDatas()
         requestGPSPermission()
     }
@@ -75,7 +75,7 @@ extension DustViewController: CLLocationManagerDelegate {
 private extension DustViewController {
     
     func setupLayout() {
-        [backgroundView, nameLabel].forEach { view.addSubview($0) }
+        [backgroundView, citynameLabel, airPollutionValueLabel].forEach { view.addSubview($0) }
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -84,7 +84,12 @@ private extension DustViewController {
             $0.trailing.equalToSuperview()
         }
         
-        nameLabel.snp.makeConstraints {
+        citynameLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(airPollutionValueLabel.snp.top).inset(30.0)
+        }
+        
+        airPollutionValueLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
     }
@@ -97,8 +102,8 @@ private extension DustViewController {
                 
                 DispatchQueue.main.async {
                     let airPollutonValueData = lroundl(self.airPollutonData[0].components["pm10"] ?? 0)
-                    self.nameLabel.text = String(airPollutonValueData)
-                    self.nameLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
+                    self.airPollutionValueLabel.text = String(airPollutonValueData)
+                    self.airPollutionValueLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
                     
                     self.view.addSubview(self.bottomSheetView)
@@ -144,5 +149,28 @@ private extension DustViewController {
         default:
             print("GPS: Default")
         }
+    }
+    
+    func setupCityname() {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        
+        guard let currentLatitude = locationManager.location?.coordinate.latitude else { return }
+        guard let currentLongitude = locationManager.location?.coordinate.longitude else { return }
+        
+        networkManager.airPollutionURL = "https://api.openweathermap.org/data/2.5/air_pollution?lat=\(currentLatitude)&lon=\(currentLongitude)&appid="
+        
+        let findLocation = CLLocation(latitude: currentLatitude, longitude: currentLongitude)
+        let geocoder = CLGeocoder()
+        let locale = Locale(identifier: "Ko-kr")
+        geocoder.reverseGeocodeLocation(findLocation, preferredLocale: locale, completionHandler: {(placemarks, error) in
+            if let address: [CLPlacemark] = placemarks {
+                sleep(1)
+                self.citynameLabel.text = "\(String(address.last?.locality ?? "오류"))의 미세먼지 농도는"
+                self.citynameLabel.textColor = .white
+            }
+        }
+        )
     }
 }

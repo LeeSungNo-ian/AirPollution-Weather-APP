@@ -100,7 +100,7 @@
 			children = (
 				0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */,
 				0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */,
-				0A7F98D728F3342E00C1AB50 /* RequestURL + APIKey */,
+				0A7F98D728F3342E00C1AB50 /* APIKey */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -122,12 +122,12 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
-		0A7F98D728F3342E00C1AB50 /* RequestURL + APIKey */ = {
+		0A7F98D728F3342E00C1AB50 /* APIKey */ = {
 			isa = PBXGroup;
 			children = (
 				0A7F98DA28F3349D00C1AB50 /* APIKey.swift */,
 			);
-			path = "RequestURL + APIKey";
+			path = APIKey;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
