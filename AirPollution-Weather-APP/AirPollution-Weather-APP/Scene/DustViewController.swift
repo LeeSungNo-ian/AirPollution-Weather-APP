@@ -6,12 +6,16 @@
 //
 
 import UIKit
+
 import SnapKit
+import CoreLocation
 
 final class DustViewController: UIViewController {
 
     var networkManager = NetworkManager()
     var airPollutonData: [List]!
+        
+    let locationManager = CLLocationManager()
     
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
@@ -28,25 +32,47 @@ final class DustViewController: UIViewController {
         return backgroundView
     }()
     
-    private lazy var nameLabel: UILabel = {
+    private lazy var citynameLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
-        label.font = .systemFont(ofSize: 200.0, weight: .bold)
+        label.font = .systemFont(ofSize: 20.0, weight: .bold)
+        
+        return label
+    }()
+    
+    private lazy var airPollutionValueLabel: UILabel = {
+        let label = UILabel()
         
         return label
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         setupLayout()
+        setupCityName()
         setupNetworkDatas()
+        requestGPSPermission()
+    }
+}
+
+extension DustViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.first
+        
+        let latitude = location?.coordinate.latitude
+        let longitude = location?.coordinate.longitude
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("error \(error.localizedDescription)")
     }
 }
 
 private extension DustViewController {
     
     func setupLayout() {
-        [backgroundView, nameLabel].forEach { view.addSubview($0) }
+        [backgroundView, citynameLabel, airPollutionValueLabel].forEach { view.addSubview($0) }
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -55,7 +81,12 @@ private extension DustViewController {
             $0.trailing.equalToSuperview()
         }
         
-        nameLabel.snp.makeConstraints {
+        citynameLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(airPollutionValueLabel.snp.top).inset(20.0)
+        }
+        
+        airPollutionValueLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
     }
@@ -68,8 +99,17 @@ private extension DustViewController {
                 
                 DispatchQueue.main.async {
                     let airPollutonValueData = lroundl(self.airPollutonData[0].components["pm10"] ?? 0)
-                    self.nameLabel.text = String(airPollutonValueData)
-                    self.nameLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
+                    self.airPollutionValueLabel.text = String(airPollutonValueData)
+                    
+                    if (airPollutonValueData / 100) >= 1 {
+                        self.airPollutionValueLabel.font = .systemFont(ofSize: 200.0, weight: .bold)
+                    } else if (airPollutonValueData / 10) >= 1 {
+                        self.airPollutionValueLabel.font = .systemFont(ofSize: 250.0, weight: .bold)
+                    } else {
+                        self.airPollutionValueLabel.font = .systemFont(ofSize: 330.0, weight: .bold)
+                    }
+                    
+                    self.airPollutionValueLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
                     
                     self.view.addSubview(self.bottomSheetView)
@@ -102,5 +142,42 @@ private extension DustViewController {
         visualEffectView.alpha = airPollutionValue
         visualEffectView.frame = view.frame
         view.addSubview(visualEffectView)
+    }
+    
+    func requestGPSPermission(){
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedAlways, .authorizedWhenInUse:
+            print("GPS: 권한 있음")
+        case .restricted, .notDetermined:
+            print("GPS: 아직 선택하지 않음")
+        case .denied:
+            print("GPS: 권한 없음")
+        default:
+            print("GPS: Default")
+        }
+    }
+    
+    func setupCityName() {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        
+        guard let currentLatitude = locationManager.location?.coordinate.latitude else { return }
+        guard let currentLongitude = locationManager.location?.coordinate.longitude else { return }
+        
+        networkManager.airPollutionURL = "https://api.openweathermap.org/data/2.5/air_pollution?lat=\(currentLatitude)&lon=\(currentLongitude)&appid="
+        
+        let findLocation = CLLocation(latitude: currentLatitude, longitude: currentLongitude)
+        let geocoder = CLGeocoder()
+        let locale = Locale(identifier: "Ko-kr")
+        geocoder.reverseGeocodeLocation(findLocation, preferredLocale: locale, completionHandler: {(placemarks, error) in
+            if let address: [CLPlacemark] = placemarks {
+                sleep(1)
+                self.citynameLabel.text = "\(String(address.last?.locality ?? "오류")) 미세먼지 농도는"
+                self.citynameLabel.textColor = .white
+                UILabel().changeTextWeightSpecificRange(label: self.citynameLabel, fontSize: 20.0, fontWeight: UIFont.Weight.regular, range: "미세먼지 농도는")
+            }
+        }
+        )
     }
 }
