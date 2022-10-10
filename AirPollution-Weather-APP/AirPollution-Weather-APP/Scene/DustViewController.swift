@@ -101,12 +101,12 @@ private extension DustViewController {
                     let airPollutonValueData = lroundl(self.airPollutonData[0].components["pm10"] ?? 0)
                     self.airPollutionValueLabel.text = String(airPollutonValueData)
                     
-                    if (airPollutonValueData / 100) > 1 {
-                        self.airPollutionValueLabel.font = .systemFont(ofSize: 100.0, weight: .bold)
-                    } else if (airPollutonValueData / 10) > 1 {
+                    if (airPollutonValueData / 100) >= 1 {
                         self.airPollutionValueLabel.font = .systemFont(ofSize: 200.0, weight: .bold)
+                    } else if (airPollutonValueData / 10) >= 1 {
+                        self.airPollutionValueLabel.font = .systemFont(ofSize: 250.0, weight: .bold)
                     } else {
-                        self.airPollutionValueLabel.font = .systemFont(ofSize: 300.0, weight: .bold)
+                        self.airPollutionValueLabel.font = .systemFont(ofSize: 330.0, weight: .bold)
                     }
                     
                     self.airPollutionValueLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor

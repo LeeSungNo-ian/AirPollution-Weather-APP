@@ -26,8 +26,8 @@ enum AirPollutionDataStatus: String {
         switch self {
         case .good: return 0.0
         case .soso: return 0.6
-        case .bad: return 0.8
-        case .veryBad: return 0.95
+        case .bad: return 0.75
+        case .veryBad: return 0.9
         }
     }
 }
