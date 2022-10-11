@@ -6,12 +6,16 @@
 //
 
 import UIKit
+
 import SnapKit
+import CoreLocation
 
 final class BottomSheetView: PassThroughView {
 
     var networkManager = NetworkManager()
     var weatherData: Temp!
+
+    let locationManager = CLLocationManager()
 
     var currentCityName: String = "" {
         didSet {
@@ -34,7 +38,7 @@ final class BottomSheetView: PassThroughView {
             case .tip:
                 return 0.88 // 값이 클수록 BottomSheet의 길이가 줄어든다
             case .full:
-                return 0.3
+                return 0.315 // 값이 커질 수록 뷰는 밑으로 내려간다
             }
         }
         
@@ -63,7 +67,7 @@ final class BottomSheetView: PassThroughView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18.0, weight: .semibold)
         label.textColor = .lightGray
-        label.text = "17°"
+        label.text = "30°"
         
         return label
     }()
@@ -77,7 +81,7 @@ final class BottomSheetView: PassThroughView {
     
     private let inputCityNametextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "   검색할 도시를 입력해주세요"
+        textField.placeholder = "검색할 도시를 입력해주세요"
         textField.font = UIFont.systemFont(ofSize: 14)
         textField.textColor = .lightGray
         textField.backgroundColor = .textFieldBackGroundColor
@@ -136,6 +140,10 @@ final class BottomSheetView: PassThroughView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        setupCityName()
+        setupNetworkDatas()
+        inputCityNametextField.addLeftPadding()
+    
         inputCityNametextField.delegate = self
         
         self.backgroundColor = .clear
@@ -243,6 +251,23 @@ final class BottomSheetView: PassThroughView {
             $0.top.equalToSuperview().inset(offset)
         }
     }
+        
+    func setupNetworkDatas() {
+        networkManager.fetchWeatherData { result in
+            switch result {
+            case Result.success(let weatherValueData):
+                self.weatherData = weatherValueData
+                
+                DispatchQueue.main.async {
+                    let weatherValueData = self.weatherData.temp - 273.15
+                    self.tempLabel.text = "\(Int(round(weatherValueData)))°"
+                }
+                
+            case Result.failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
 
 extension BottomSheetView: UITextFieldDelegate {
@@ -252,7 +277,7 @@ extension BottomSheetView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let cityName = self.inputCityNametextField.text {
-            networkManager.fetchWeatherData(cityName: cityName) { result in
+            networkManager.fetchSearchingWeatherData(cityName: cityName) { result in
                 switch result {
                 case Result.success(let weatherValueData):
                     self.weatherData = weatherValueData
@@ -270,5 +295,30 @@ extension BottomSheetView: UITextFieldDelegate {
         
         textField.resignFirstResponder()
         return true
+    }
+    
+    func setupCityName() {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        
+        guard let currentLatitude = locationManager.location?.coordinate.latitude else { return }
+        guard let currentLongitude = locationManager.location?.coordinate.longitude else { return }
+        
+        networkManager.weatherDataURL = "https://api.openweathermap.org/data/2.5/weather?lat=\(currentLatitude)&lon=\(currentLongitude)&appid="
+    }
+}
+
+extension BottomSheetView: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.first
+        
+        let latitude = location?.coordinate.latitude
+        let longitude = location?.coordinate.longitude
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("error \(error.localizedDescription)")
     }
 }

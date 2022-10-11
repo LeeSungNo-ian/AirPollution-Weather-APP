@@ -13,13 +13,19 @@ final class NetworkManager {
     typealias WeatherDataNetworkCompletion = (Result<Temp, NetworkError>) -> Void
     
     var airPollutionURL = ""
+    var weatherDataURL = ""
     
     func fetchAirPollutionData(completion: @escaping AirPollutionNetworkCompletion) {
         let urlString = self.airPollutionURL + APIKey().apiKey
         airPollutionPerformRequest(with: urlString) { result in completion(result) }
     }
     
-    func fetchWeatherData(cityName: String, completion: @escaping WeatherDataNetworkCompletion) {
+    func fetchWeatherData(completion: @escaping WeatherDataNetworkCompletion) {
+        let urlString = self.weatherDataURL + APIKey().apiKey
+        weatherDataPerformRequest(with: urlString) { result in completion(result) }
+    }
+    
+    func fetchSearchingWeatherData(cityName: String, completion: @escaping WeatherDataNetworkCompletion) {
         let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&appid=\(APIKey().apiKey)"
         weatherDataPerformRequest(with: urlString) { result in completion(result) }
     }

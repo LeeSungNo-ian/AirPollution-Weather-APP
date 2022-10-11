@@ -23,6 +23,7 @@
 		0A7F98DB28F3349D00C1AB50 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DA28F3349D00C1AB50 /* APIKey.swift */; };
 		0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */; };
 		0A9EB1E728F4F83000975AF9 /* WeatherDataApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */; };
+		0A9EB1EA28F5332400975AF9 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9EB1E928F5332400975AF9 /* UITextField+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		0A7F98DA28F3349D00C1AB50 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPollutionDataStatus.swift; sourceTree = "<group>"; };
 		0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataApiModel.swift; sourceTree = "<group>"; };
+		0A9EB1E928F5332400975AF9 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 			children = (
 				0A739EB028F3691800E629E8 /* UIColor+.swift */,
 				0A436ED328F4849E00DDE543 /* UILabel+.swift */,
+				0A9EB1E928F5332400975AF9 /* UITextField+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				0A436ED428F4849E00DDE543 /* UILabel+.swift in Sources */,
 				0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */,
 				0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */,
+				0A9EB1EA28F5332400975AF9 /* UITextField+.swift in Sources */,
 				0A739EAE28F363BF00E629E8 /* BottomSheetView.swift in Sources */,
 				0A2D1DAC28F3181C0065B6DC /* SceneDelegate.swift in Sources */,
 				0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */,

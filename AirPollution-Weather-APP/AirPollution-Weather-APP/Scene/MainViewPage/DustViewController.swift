@@ -44,7 +44,7 @@ final class DustViewController: UIViewController {
     
     private lazy var citynameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20.0, weight: .bold)
+        label.font = .systemFont(ofSize: 24.0, weight: .bold)
         
         return label
     }()
@@ -185,7 +185,7 @@ private extension DustViewController {
                 sleep(1)
                 self.citynameLabel.text = "\(String(address.last?.locality ?? "잘못된 도시 이름이에요.")) 미세먼지 농도는"
                 self.citynameLabel.textColor = .white
-                UILabel().changeTextWeightSpecificRange(label: self.citynameLabel, fontSize: 20.0, fontWeight: UIFont.Weight.regular, range: "미세먼지 농도는")
+                UILabel().changeTextWeightSpecificRange(label: self.citynameLabel, fontSize: 24.0, fontWeight: UIFont.Weight.regular, range: "미세먼지 농도는")
                 self.bottomSheetView.currentCityName = String(address.last?.locality ?? "잘못된 도시 이름이에요.")
             }
         }
