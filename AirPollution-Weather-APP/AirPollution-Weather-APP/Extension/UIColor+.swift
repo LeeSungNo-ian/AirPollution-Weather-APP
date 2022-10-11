@@ -21,4 +21,6 @@ extension UIColor {
     
     class var bottomSheetBackGroundColor: UIColor { UIColor(hex: 0x252629) }
     class var bottomSheetBarViewColor: UIColor { UIColor(hex: 0x606166) }
+    class var bottomSheetContentBackGroundColor: UIColor { UIColor(hex: 0x2C2C2D) }
+    class var textFieldBackGroundColor: UIColor { UIColor(hex: 0x383A3E) }
 }

@@ -17,10 +17,20 @@ final class DustViewController: UIViewController {
         
     let locationManager = CLLocationManager()
     
+    private lazy var weatherDataContentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .bottomSheetBackGroundColor
+        view.layer.cornerRadius = 4
+        view.clipsToBounds = true
+        
+        return view
+    }()
+    
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
-        view.bottomSheetColor = .bottomSheetBackGroundColor
+        view.bottomSheetBackGroundColor = .bottomSheetBackGroundColor
         view.barViewColor = .bottomSheetBarViewColor
+        view.bottomSheetContentViewColor = .bottomSheetContentBackGroundColor
         
         return view
     }()
@@ -34,7 +44,7 @@ final class DustViewController: UIViewController {
     
     private lazy var citynameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20.0, weight: .bold)
+        label.font = .systemFont(ofSize: 24.0, weight: .bold)
         
         return label
     }()
@@ -47,9 +57,9 @@ final class DustViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupLayout()
+        
         setupCityName()
+        setupLayout()
         setupNetworkDatas()
         requestGPSPermission()
     }
@@ -173,9 +183,10 @@ private extension DustViewController {
         geocoder.reverseGeocodeLocation(findLocation, preferredLocale: locale, completionHandler: {(placemarks, error) in
             if let address: [CLPlacemark] = placemarks {
                 sleep(1)
-                self.citynameLabel.text = "\(String(address.last?.locality ?? "오류")) 미세먼지 농도는"
+                self.citynameLabel.text = "\(String(address.last?.locality ?? "잘못된 도시 이름이에요.")) 미세먼지 농도는"
                 self.citynameLabel.textColor = .white
-                UILabel().changeTextWeightSpecificRange(label: self.citynameLabel, fontSize: 20.0, fontWeight: UIFont.Weight.regular, range: "미세먼지 농도는")
+                UILabel().changeTextWeightSpecificRange(label: self.citynameLabel, fontSize: 24.0, fontWeight: UIFont.Weight.regular, range: "미세먼지 농도는")
+                self.bottomSheetView.currentCityName = String(address.last?.locality ?? "잘못된 도시 이름이에요.")
             }
         }
         )

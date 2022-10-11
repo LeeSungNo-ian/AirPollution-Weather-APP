@@ -22,6 +22,8 @@
 		0A7F98D628F3330600C1AB50 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D528F3330600C1AB50 /* NetworkManager.swift */; };
 		0A7F98DB28F3349D00C1AB50 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DA28F3349D00C1AB50 /* APIKey.swift */; };
 		0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */; };
+		0A9EB1E728F4F83000975AF9 /* WeatherDataApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */; };
+		0A9EB1EA28F5332400975AF9 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9EB1E928F5332400975AF9 /* UITextField+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,8 @@
 		0A7F98D528F3330600C1AB50 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		0A7F98DA28F3349D00C1AB50 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPollutionDataStatus.swift; sourceTree = "<group>"; };
+		0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataApiModel.swift; sourceTree = "<group>"; };
+		0A9EB1E928F5332400975AF9 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,9 +94,8 @@
 		0A2D1DC028F324990065B6DC /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				0A2D1DAD28F3181C0065B6DC /* DustViewController.swift */,
-				0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */,
-				0A739EAB28F3639800E629E8 /* PassThroughView.swift */,
+				0A436ED728F4A65700DDE543 /* MainViewPage */,
+				0A436ED828F4A66200DDE543 /* BottomViewPage */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -100,11 +103,28 @@
 		0A2D1DC128F330C50065B6DC /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */,
+				0A9EB1E828F4F83A00975AF9 /* API */,
 				0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */,
 				0A7F98D728F3342E00C1AB50 /* APIKey */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		0A436ED728F4A65700DDE543 /* MainViewPage */ = {
+			isa = PBXGroup;
+			children = (
+				0A2D1DAD28F3181C0065B6DC /* DustViewController.swift */,
+			);
+			path = MainViewPage;
+			sourceTree = "<group>";
+		};
+		0A436ED828F4A66200DDE543 /* BottomViewPage */ = {
+			isa = PBXGroup;
+			children = (
+				0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */,
+				0A739EAB28F3639800E629E8 /* PassThroughView.swift */,
+			);
+			path = BottomViewPage;
 			sourceTree = "<group>";
 		};
 		0A739EAF28F3690100E629E8 /* Extension */ = {
@@ -112,6 +132,7 @@
 			children = (
 				0A739EB028F3691800E629E8 /* UIColor+.swift */,
 				0A436ED328F4849E00DDE543 /* UILabel+.swift */,
+				0A9EB1E928F5332400975AF9 /* UITextField+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -131,6 +152,15 @@
 				0A7F98DA28F3349D00C1AB50 /* APIKey.swift */,
 			);
 			path = APIKey;
+			sourceTree = "<group>";
+		};
+		0A9EB1E828F4F83A00975AF9 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */,
+				0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -218,9 +248,11 @@
 				0A436ED428F4849E00DDE543 /* UILabel+.swift in Sources */,
 				0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */,
 				0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */,
+				0A9EB1EA28F5332400975AF9 /* UITextField+.swift in Sources */,
 				0A739EAE28F363BF00E629E8 /* BottomSheetView.swift in Sources */,
 				0A2D1DAC28F3181C0065B6DC /* SceneDelegate.swift in Sources */,
 				0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */,
+				0A9EB1E728F4F83000975AF9 /* WeatherDataApiModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
