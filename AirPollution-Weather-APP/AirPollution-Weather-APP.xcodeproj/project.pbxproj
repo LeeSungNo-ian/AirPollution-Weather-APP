@@ -90,9 +90,8 @@
 		0A2D1DC028F324990065B6DC /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				0A2D1DAD28F3181C0065B6DC /* DustViewController.swift */,
-				0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */,
-				0A739EAB28F3639800E629E8 /* PassThroughView.swift */,
+				0A436ED728F4A65700DDE543 /* MainViewPage */,
+				0A436ED828F4A66200DDE543 /* BottomViewPage */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -105,6 +104,23 @@
 				0A7F98D728F3342E00C1AB50 /* APIKey */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		0A436ED728F4A65700DDE543 /* MainViewPage */ = {
+			isa = PBXGroup;
+			children = (
+				0A2D1DAD28F3181C0065B6DC /* DustViewController.swift */,
+			);
+			path = MainViewPage;
+			sourceTree = "<group>";
+		};
+		0A436ED828F4A66200DDE543 /* BottomViewPage */ = {
+			isa = PBXGroup;
+			children = (
+				0A739EAD28F363BF00E629E8 /* BottomSheetView.swift */,
+				0A739EAB28F3639800E629E8 /* PassThroughView.swift */,
+			);
+			path = BottomViewPage;
 			sourceTree = "<group>";
 		};
 		0A739EAF28F3690100E629E8 /* Extension */ = {

@@ -10,6 +10,12 @@ import SnapKit
 
 final class BottomSheetView: PassThroughView {
 
+    var currentCityName: String = "" {
+        didSet {
+            citynameLabel.text = "현재 \(currentCityName)의 온도"
+        }
+    }
+    
     enum Mode {
         case tip
         case full
@@ -19,11 +25,11 @@ final class BottomSheetView: PassThroughView {
         static let duration = 0.5
         static let cornerRadius = 12.0
         static let barViewTopSpacing = 5.0
-        static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.1, height: 6.0)
+        static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.08, height: 5.0)
         static let bottomSheetRatio: (Mode) -> Double = { mode in
             switch mode {
             case .tip:
-                return 0.8 // 위에서 부터의 값 (밑으로 갈수록 값이 커짐)
+                return 0.7 // 위에서 부터의 값 (밑으로 갈수록 값이 커짐)
             case .full:
                 return 0.07
             }
@@ -41,10 +47,36 @@ final class BottomSheetView: PassThroughView {
         return view
     }()
     
-    private let barView: UIView = {
+    private lazy var barView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
         
+        return view
+    }()
+    
+    private let inputCityNametextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "   도시를 입력해주세요"
+        textField.font = UIFont.boldSystemFont(ofSize: 14)
+        textField.textColor = .lightGray
+        textField.backgroundColor = .textFieldBackGroundColor
+        textField.layer.borderColor = UIColor.red.cgColor
+        textField.layer.cornerRadius = 6
+        
+        return textField
+    }()
+    
+    lazy var citynameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16.0, weight: .semibold)
+        label.textColor = .lightGray
+        
+        return label
+    }()
+    
+    private lazy var bottomContentView: UIView = {
+        let view = UIView()
+
         return view
     }()
     
@@ -61,12 +93,16 @@ final class BottomSheetView: PassThroughView {
         }
     }
     
-    var bottomSheetColor: UIColor? {
-        didSet { self.bottomSheetView.backgroundColor = self.bottomSheetColor }
+    var bottomSheetBackGroundColor: UIColor? {
+        didSet { self.bottomSheetView.backgroundColor = self.bottomSheetBackGroundColor }
     }
     
     var barViewColor: UIColor? {
         didSet { self.barView.backgroundColor = self.barViewColor }
+    }
+    
+    var bottomSheetContentViewColor: UIColor? {
+        didSet { self.bottomContentView.backgroundColor = self.bottomSheetContentViewColor }
     }
     
     // MARK: Initializer
@@ -79,6 +115,8 @@ final class BottomSheetView: PassThroughView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        inputCityNametextField.delegate = self
+        
         self.backgroundColor = .clear
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan))
         self.addGestureRecognizer(panGesture)
@@ -89,18 +127,44 @@ final class BottomSheetView: PassThroughView {
         
         self.addSubview(self.bottomSheetView)
         self.bottomSheetView.addSubview(self.barView)
+        self.bottomSheetView.addSubview(self.bottomContentView)
+        self.bottomSheetView.addSubview(self.citynameLabel)
+        self.bottomSheetView.addSubview(self.inputCityNametextField)
         
         self.bottomSheetView.snp.makeConstraints {
             $0.left.right.bottom.equalToSuperview()
             $0.top.equalTo(Const.bottomSheetYPosition(.tip))
         }
         
-        self.barView.layer.cornerRadius = 3
+        self.barView.layer.cornerRadius = 2.5
         self.barView.clipsToBounds = true
+        
         self.barView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(Const.barViewTopSpacing)
             $0.size.equalTo(Const.barViewSize)
+        }
+        
+        self.inputCityNametextField.snp.makeConstraints {
+            $0.top.equalTo(barView.snp.bottom).offset(30.0)
+            $0.leading.equalTo(bottomSheetView.snp.leading).inset(16.0)
+            $0.trailing.equalTo(bottomSheetView.snp.trailing).inset(16.0)
+            $0.height.equalTo(30)
+        }
+        
+        self.citynameLabel.snp.makeConstraints {
+            $0.top.equalTo(inputCityNametextField.snp.bottom).offset(30.0)
+            $0.leading.equalTo(inputCityNametextField)
+        }
+        
+        self.bottomContentView.layer.cornerRadius = 10
+        self.bottomContentView.clipsToBounds = true
+        self.bottomContentView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(citynameLabel.snp.bottom).offset(16.0)
+            $0.leading.equalTo(citynameLabel)
+            $0.trailing.equalTo(inputCityNametextField)
+            $0.height.equalTo(200)
         }
     }
     
@@ -145,4 +209,13 @@ final class BottomSheetView: PassThroughView {
     }
 }
 
-
+extension BottomSheetView: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.mode = Mode.full
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}

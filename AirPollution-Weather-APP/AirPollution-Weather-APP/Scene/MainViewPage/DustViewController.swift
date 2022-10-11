@@ -19,8 +19,9 @@ final class DustViewController: UIViewController {
     
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
-        view.bottomSheetColor = .bottomSheetBackGroundColor
+        view.bottomSheetBackGroundColor = .bottomSheetBackGroundColor
         view.barViewColor = .bottomSheetBarViewColor
+        view.bottomSheetContentViewColor = .bottomSheetContentBackGroundColor
         
         return view
     }()
@@ -47,9 +48,9 @@ final class DustViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupLayout()
+        
         setupCityName()
+        setupLayout()
         setupNetworkDatas()
         requestGPSPermission()
     }
@@ -173,9 +174,10 @@ private extension DustViewController {
         geocoder.reverseGeocodeLocation(findLocation, preferredLocale: locale, completionHandler: {(placemarks, error) in
             if let address: [CLPlacemark] = placemarks {
                 sleep(1)
-                self.citynameLabel.text = "\(String(address.last?.locality ?? "오류")) 미세먼지 농도는"
+                self.citynameLabel.text = "\(String(address.last?.locality ?? "잘못된 도시 이름이에요.")) 미세먼지 농도는"
                 self.citynameLabel.textColor = .white
                 UILabel().changeTextWeightSpecificRange(label: self.citynameLabel, fontSize: 20.0, fontWeight: UIFont.Weight.regular, range: "미세먼지 농도는")
+                self.bottomSheetView.currentCityName = String(address.last?.locality ?? "잘못된 도시 이름이에요.")
             }
         }
         )
