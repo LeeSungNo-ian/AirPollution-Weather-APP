@@ -17,6 +17,15 @@ final class DustViewController: UIViewController {
         
     let locationManager = CLLocationManager()
     
+    private lazy var weatherDataContentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .bottomSheetBackGroundColor
+        view.layer.cornerRadius = 4
+        view.clipsToBounds = true
+        
+        return view
+    }()
+    
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
         view.bottomSheetBackGroundColor = .bottomSheetBackGroundColor

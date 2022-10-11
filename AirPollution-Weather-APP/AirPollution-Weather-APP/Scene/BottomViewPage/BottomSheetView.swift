@@ -10,9 +10,12 @@ import SnapKit
 
 final class BottomSheetView: PassThroughView {
 
+    var networkManager = NetworkManager()
+    var weatherData: Temp!
+
     var currentCityName: String = "" {
         didSet {
-            citynameLabel.text = "현재 \(currentCityName)의 온도"
+            citynameLabel.text = "현재 \(currentCityName) 온도"
         }
     }
     
@@ -25,13 +28,13 @@ final class BottomSheetView: PassThroughView {
         static let duration = 0.5
         static let cornerRadius = 12.0
         static let barViewTopSpacing = 5.0
-        static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.08, height: 5.0)
+        static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.09, height: 5.0)
         static let bottomSheetRatio: (Mode) -> Double = { mode in
             switch mode {
             case .tip:
-                return 0.7 // 위에서 부터의 값 (밑으로 갈수록 값이 커짐)
+                return 0.88 // 값이 클수록 BottomSheet의 길이가 줄어든다
             case .full:
-                return 0.07
+                return 0.3
             }
         }
         
@@ -47,6 +50,24 @@ final class BottomSheetView: PassThroughView {
         return view
     }()
     
+    private lazy var weatherDataContentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .bottomSheetBackGroundColor
+        view.layer.cornerRadius = 6
+        view.clipsToBounds = true
+
+        return view
+    }()
+    
+    lazy var tempLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 18.0, weight: .semibold)
+        label.textColor = .lightGray
+        label.text = "17°"
+        
+        return label
+    }()
+    
     private lazy var barView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
@@ -56,19 +77,19 @@ final class BottomSheetView: PassThroughView {
     
     private let inputCityNametextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "   도시를 입력해주세요"
-        textField.font = UIFont.boldSystemFont(ofSize: 14)
+        textField.placeholder = "   검색할 도시를 입력해주세요"
+        textField.font = UIFont.systemFont(ofSize: 14)
         textField.textColor = .lightGray
         textField.backgroundColor = .textFieldBackGroundColor
         textField.layer.borderColor = UIColor.red.cgColor
-        textField.layer.cornerRadius = 6
+        textField.layer.cornerRadius = 8.0
         
         return textField
     }()
     
     lazy var citynameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 15.0, weight: .semibold)
         label.textColor = .lightGray
         
         return label
@@ -126,14 +147,25 @@ final class BottomSheetView: PassThroughView {
         self.bottomSheetView.clipsToBounds = true
         
         self.addSubview(self.bottomSheetView)
+        self.addSubview(self.weatherDataContentView)
+        
+        self.weatherDataContentView.addSubview(tempLabel)
+        
         self.bottomSheetView.addSubview(self.barView)
-        self.bottomSheetView.addSubview(self.bottomContentView)
-        self.bottomSheetView.addSubview(self.citynameLabel)
         self.bottomSheetView.addSubview(self.inputCityNametextField)
+        self.bottomSheetView.addSubview(self.citynameLabel)
+        self.bottomSheetView.addSubview(self.bottomContentView)
         
         self.bottomSheetView.snp.makeConstraints {
             $0.left.right.bottom.equalToSuperview()
             $0.top.equalTo(Const.bottomSheetYPosition(.tip))
+        }
+        
+        self.weatherDataContentView.snp.makeConstraints {
+            $0.bottom.equalTo(barView.snp.top).offset(-20.0)
+            $0.trailing.equalToSuperview().inset(16.0)
+            $0.height.equalTo(40.0)
+            $0.width.equalTo(60.0)
         }
         
         self.barView.layer.cornerRadius = 2.5
@@ -146,14 +178,14 @@ final class BottomSheetView: PassThroughView {
         }
         
         self.inputCityNametextField.snp.makeConstraints {
-            $0.top.equalTo(barView.snp.bottom).offset(30.0)
+            $0.top.equalTo(barView.snp.bottom).offset(8.0)
             $0.leading.equalTo(bottomSheetView.snp.leading).inset(16.0)
             $0.trailing.equalTo(bottomSheetView.snp.trailing).inset(16.0)
-            $0.height.equalTo(30)
+            $0.height.equalTo(32.0)
         }
         
         self.citynameLabel.snp.makeConstraints {
-            $0.top.equalTo(inputCityNametextField.snp.bottom).offset(30.0)
+            $0.top.equalTo(inputCityNametextField.snp.bottom).offset(24.0)
             $0.leading.equalTo(inputCityNametextField)
         }
         
@@ -161,10 +193,14 @@ final class BottomSheetView: PassThroughView {
         self.bottomContentView.clipsToBounds = true
         self.bottomContentView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(citynameLabel.snp.bottom).offset(16.0)
+            $0.top.equalTo(citynameLabel.snp.bottom).offset(12.0)
             $0.leading.equalTo(citynameLabel)
             $0.trailing.equalTo(inputCityNametextField)
             $0.height.equalTo(200)
+        }
+        
+        self.tempLabel.snp.makeConstraints {
+            $0.center.equalTo(weatherDataContentView.snp.center)
         }
     }
     
@@ -215,6 +251,23 @@ extension BottomSheetView: UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let cityName = self.inputCityNametextField.text {
+            networkManager.fetchWeatherData(cityName: cityName) { result in
+                switch result {
+                case Result.success(let weatherValueData):
+                    self.weatherData = weatherValueData
+                    
+                    DispatchQueue.main.async {
+                        let weatherValueData = self.weatherData.temp - 273.15
+                        self.tempLabel.text = "\(Int(round(weatherValueData)))°C"
+                    }
+                
+                case Result.failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        
         textField.resignFirstResponder()
         return true
     }

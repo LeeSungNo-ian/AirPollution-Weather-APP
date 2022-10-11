@@ -22,6 +22,7 @@
 		0A7F98D628F3330600C1AB50 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D528F3330600C1AB50 /* NetworkManager.swift */; };
 		0A7F98DB28F3349D00C1AB50 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DA28F3349D00C1AB50 /* APIKey.swift */; };
 		0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */; };
+		0A9EB1E728F4F83000975AF9 /* WeatherDataApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		0A7F98D528F3330600C1AB50 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		0A7F98DA28F3349D00C1AB50 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPollutionDataStatus.swift; sourceTree = "<group>"; };
+		0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataApiModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +101,7 @@
 		0A2D1DC128F330C50065B6DC /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */,
+				0A9EB1E828F4F83A00975AF9 /* API */,
 				0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */,
 				0A7F98D728F3342E00C1AB50 /* APIKey */,
 			);
@@ -147,6 +149,15 @@
 				0A7F98DA28F3349D00C1AB50 /* APIKey.swift */,
 			);
 			path = APIKey;
+			sourceTree = "<group>";
+		};
+		0A9EB1E828F4F83A00975AF9 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */,
+				0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,6 +248,7 @@
 				0A739EAE28F363BF00E629E8 /* BottomSheetView.swift in Sources */,
 				0A2D1DAC28F3181C0065B6DC /* SceneDelegate.swift in Sources */,
 				0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */,
+				0A9EB1E728F4F83000975AF9 /* WeatherDataApiModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
