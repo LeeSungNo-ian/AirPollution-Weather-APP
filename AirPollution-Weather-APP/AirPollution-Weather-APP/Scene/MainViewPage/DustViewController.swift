@@ -17,15 +17,6 @@ final class DustViewController: UIViewController {
         
     let locationManager = CLLocationManager()
     
-    private lazy var weatherDataContentView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .bottomSheetBackGroundColor
-        view.layer.cornerRadius = 4
-        view.clipsToBounds = true
-        
-        return view
-    }()
-    
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
         view.bottomSheetBackGroundColor = .bottomSheetBackGroundColor
@@ -37,9 +28,14 @@ final class DustViewController: UIViewController {
     
     private lazy var backgroundView: UIView = {
         let backgroundView = UIView()
-        backgroundView.backgroundColor = .black
         
         return backgroundView
+    }()
+    
+    private lazy var charImageView: UIImageView = {
+        let imageView = UIImageView()
+        
+        return imageView
     }()
     
     private lazy var citynameLabel: UILabel = {
@@ -82,7 +78,7 @@ extension DustViewController: CLLocationManagerDelegate {
 private extension DustViewController {
     
     func setupLayout() {
-        [backgroundView, citynameLabel, airPollutionValueLabel].forEach { view.addSubview($0) }
+        [backgroundView, charImageView, airPollutionValueLabel].forEach { view.addSubview($0) }
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -91,9 +87,10 @@ private extension DustViewController {
             $0.trailing.equalToSuperview()
         }
         
-        citynameLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(airPollutionValueLabel.snp.top).inset(20.0)
+        charImageView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.width.equalTo(500)
+            $0.height.equalTo(500)
         }
         
         airPollutionValueLabel.snp.makeConstraints {
@@ -109,18 +106,9 @@ private extension DustViewController {
                 
                 DispatchQueue.main.async {
                     let airPollutonValueData = lroundl(self.airPollutonData[0].components["pm10"] ?? 0)
-                    self.airPollutionValueLabel.text = String(airPollutonValueData)
-                    
-                    if (airPollutonValueData / 100) >= 1 {
-                        self.airPollutionValueLabel.font = .systemFont(ofSize: 200.0, weight: .bold)
-                    } else if (airPollutonValueData / 10) >= 1 {
-                        self.airPollutionValueLabel.font = .systemFont(ofSize: 250.0, weight: .bold)
-                    } else {
-                        self.airPollutionValueLabel.font = .systemFont(ofSize: 330.0, weight: .bold)
-                    }
-                    
-                    self.airPollutionValueLabel.textColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
+                    self.backgroundView.backgroundColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
+                    self.charImageView.image = self.currentAirPollutionStatus(airPollutonValueData).characterImageSet
                     
                     self.view.addSubview(self.bottomSheetView)
                     self.bottomSheetView.snp.makeConstraints {
@@ -136,9 +124,9 @@ private extension DustViewController {
     
     func currentAirPollutionStatus(_ airPollutionValue: Int) -> AirPollutionDataStatus {
         if airPollutionValue <= 15 {
-            return AirPollutionDataStatus.good
+            return AirPollutionDataStatus.veryGood
         } else if airPollutionValue <= 35 {
-            return AirPollutionDataStatus.soso
+            return AirPollutionDataStatus.good
         } else if airPollutionValue <= 75 {
             return AirPollutionDataStatus.bad
         } else {

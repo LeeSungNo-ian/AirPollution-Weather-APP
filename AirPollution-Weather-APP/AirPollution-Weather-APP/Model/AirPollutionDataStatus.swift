@@ -8,26 +8,35 @@
 import UIKit
 
 enum AirPollutionDataStatus: String {
+    case veryGood
     case good
-    case soso
     case bad
     case veryBad
     
     var statusColor: UIColor {
         switch self {
-        case .good: return UIColor.systemBlue
-        case .soso: return UIColor.systemGreen
-        case .bad: return UIColor.systemYellow
-        case .veryBad: return UIColor.systemRed
+        case .veryGood: return .airPollutionVeryGoodColor
+        case .good: return .airPollutionGoodColor
+        case .bad: return .airPollutionBadColor
+        case .veryBad: return .airPollutionVeryBadColor
         }
     }
     
     var statusBlurAlpha: Double {
         switch self {
-        case .good: return 0.0
-        case .soso: return 0.6
+        case .veryGood: return 0.0
+        case .good: return 0.2
         case .bad: return 0.75
-        case .veryBad: return 0.9
+        case .veryBad: return 1.0
+        }
+    }
+    
+    var characterImageSet: UIImage {
+        switch self {
+        case .veryGood: return UIImage(named: "AirPollutionVeryGood")!
+        case .good: return UIImage(named: "AirPollutionGood")!
+        case .bad: return UIImage(named: "AirPollutionBad")!
+        case .veryBad: return UIImage(named: "AirPollutionVeryBad")!
         }
     }
 }
