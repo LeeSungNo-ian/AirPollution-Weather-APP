@@ -22,6 +22,16 @@ final class BottomSheetView: PassThroughView {
         }
     }
     
+    var currentLocateWebViewURLString: String = "" {
+        didSet {
+            currentLocateWebViewURL = URL(string: currentLocateWebViewURLString)!
+            let request: URLRequest = URLRequest(url: currentLocateWebViewURL)
+            webView.load(request as URLRequest)
+        }
+    }
+    
+    var currentLocateWebViewURL: URL = URL(string:"http://t1.daumcdn.net/thumb/R600x0/?fname=http%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F4b035cdf8372d67108f7e8d339660479dfb41bbd")!
+    
     enum Mode {
         case tip
         case full
@@ -55,7 +65,7 @@ final class BottomSheetView: PassThroughView {
     
     private lazy var airPollutionDataContentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGray5
+        view.backgroundColor = .bottomSheetBackGroundColor
         view.layer.cornerRadius = 6
         view.clipsToBounds = true
         
@@ -79,7 +89,7 @@ final class BottomSheetView: PassThroughView {
     
     lazy var citynameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 18.0, weight: .medium)
         label.textColor = .lightGray
         
         return label
@@ -175,10 +185,8 @@ final class BottomSheetView: PassThroughView {
             $0.width.equalTo(400.0)
             $0.height.equalTo(700.0)
         }
-        
-        let url: URL = URL(string: "https://waqi.info/#/c/36.002/129.401/12.5z")!
-        let request: URLRequest = URLRequest(url: url)
-        
+
+        let request: URLRequest = URLRequest(url: currentLocateWebViewURL)
         webView.load(request as URLRequest)
     }
     
