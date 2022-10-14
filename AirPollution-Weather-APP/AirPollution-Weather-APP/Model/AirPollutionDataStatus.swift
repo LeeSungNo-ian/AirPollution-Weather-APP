@@ -13,6 +13,15 @@ enum AirPollutionDataStatus: String {
     case bad
     case veryBad
     
+    var statusTextLabel: String {
+        switch self {
+        case .veryGood: return "청량한 공기에요!"
+        case .good: return "좋지도, 나쁘지도 않은 공기에요."
+        case .bad: return "공기가 탁해요.."
+        case .veryBad: return "마스크 없으면 나오지도 말기.."
+        }
+    }
+
     var statusColor: UIColor {
         switch self {
         case .veryGood: return .airPollutionVeryGoodColor
