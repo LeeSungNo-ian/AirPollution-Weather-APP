@@ -21,7 +21,6 @@ final class DustViewController: UIViewController {
         let view = BottomSheetView()
         view.bottomSheetBackGroundColor = .systemGray5
         view.barViewColor = .bottomSheetBarViewColor
-        view.bottomSheetContentViewColor = .bottomSheetContentBackGroundColor
         
         return view
     }()

@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import CoreLocation
+import WebKit
 
 final class BottomSheetView: PassThroughView {
     
@@ -17,7 +18,7 @@ final class BottomSheetView: PassThroughView {
         
     var currentCityName: String = "" {
         didSet {
-            citynameLabel.text = "현재 \(currentCityName) 온도"
+            citynameLabel.text = "\(currentCityName) 주변의 미세먼지 농도"
         }
     }
     
@@ -34,9 +35,9 @@ final class BottomSheetView: PassThroughView {
         static let bottomSheetRatio: (Mode) -> Double = { mode in
             switch mode {
             case .tip:
-                return 0.88 // 값이 클수록 BottomSheet의 길이가 줄어든다
+                return 0.9 // 값이 클수록 BottomSheet의 길이가 줄어든다
             case .full:
-                return 0.315 // 값이 커질 수록 뷰는 밑으로 내려간다
+                return 0.2 // 값이 커질 수록 뷰는 밑으로 내려간다
             }
         }
         
@@ -78,16 +79,16 @@ final class BottomSheetView: PassThroughView {
     
     lazy var citynameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 18.0, weight: .semibold)
         label.textColor = .lightGray
         
         return label
     }()
     
-    private lazy var bottomContentView: UIView = {
-        let view = UIView()
+    private lazy var webView: WKWebView = {
+        let webView = WKWebView()
         
-        return view
+        return webView
     }()
     
     // MARK: Properties
@@ -110,11 +111,7 @@ final class BottomSheetView: PassThroughView {
     var barViewColor: UIColor? {
         didSet { self.barView.backgroundColor = self.barViewColor }
     }
-    
-    var bottomSheetContentViewColor: UIColor? {
-        didSet { self.bottomContentView.backgroundColor = self.bottomSheetContentViewColor }
-    }
-    
+
     // MARK: Initializer
     @available(*, unavailable)
     
@@ -140,7 +137,7 @@ final class BottomSheetView: PassThroughView {
         
         self.bottomSheetView.addSubview(self.barView)
         self.bottomSheetView.addSubview(self.citynameLabel)
-        self.bottomSheetView.addSubview(self.bottomContentView)
+        self.bottomSheetView.addSubview(self.webView)
         
         self.bottomSheetView.snp.makeConstraints {
             $0.left.right.bottom.equalToSuperview()
@@ -154,6 +151,10 @@ final class BottomSheetView: PassThroughView {
             $0.width.equalTo(80.0)
         }
         
+        self.airPollutonValueDataLabel.snp.makeConstraints {
+            $0.center.equalTo(airPollutionDataContentView.snp.center)
+        }
+        
         self.barView.layer.cornerRadius = 2.5
         self.barView.clipsToBounds = true
         
@@ -164,23 +165,21 @@ final class BottomSheetView: PassThroughView {
         }
         
         self.citynameLabel.snp.makeConstraints {
-            $0.top.equalTo(barView.snp.bottom).offset(24.0)
-            $0.leading.equalToSuperview().offset(16.0)
+            $0.top.equalTo(barView.snp.bottom).offset(18.0)
+            $0.leading.equalToSuperview().offset(24.0)
         }
         
-        self.bottomContentView.layer.cornerRadius = 10
-        self.bottomContentView.clipsToBounds = true
-        self.bottomContentView.snp.makeConstraints {
+        self.webView.snp.makeConstraints {
+            $0.top.equalTo(citynameLabel.snp.bottom).offset(40.0)
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(citynameLabel.snp.bottom).offset(12.0)
-            $0.leading.equalTo(citynameLabel)
-            $0.trailing.equalToSuperview().inset(16.0)
-            $0.height.equalTo(200.0)
+            $0.width.equalTo(400.0)
+            $0.height.equalTo(700.0)
         }
         
-        self.airPollutonValueDataLabel.snp.makeConstraints {
-            $0.center.equalTo(airPollutionDataContentView.snp.center)
-        }
+        let url: URL = URL(string: "https://waqi.info/#/c/36.002/129.401/12.5z")!
+        let request: URLRequest = URLRequest(url: url)
+        
+        webView.load(request as URLRequest)
     }
     
     // MARK: Methods
