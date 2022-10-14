@@ -82,6 +82,7 @@
 				0A2D1DAB28F3181C0065B6DC /* SceneDelegate.swift */,
 				0A739EAF28F3690100E629E8 /* Extension */,
 				0A2D1DC128F330C50065B6DC /* Model */,
+				0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */,
 				0A7F98D228F3329D00C1AB50 /* Network */,
 				0A2D1DC028F324990065B6DC /* Scene */,
 				0A2D1DB228F3181D0065B6DC /* Assets.xcassets */,
@@ -104,7 +105,6 @@
 			isa = PBXGroup;
 			children = (
 				0A9EB1E828F4F83A00975AF9 /* API */,
-				0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */,
 				0A7F98D728F3342E00C1AB50 /* APIKey */,
 			);
 			path = Model;

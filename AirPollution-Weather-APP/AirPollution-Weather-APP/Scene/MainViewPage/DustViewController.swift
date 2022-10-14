@@ -16,10 +16,10 @@ final class DustViewController: UIViewController {
     var airPollutonData: [List]!
         
     let locationManager = CLLocationManager()
-    
+        
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
-        view.bottomSheetBackGroundColor = .bottomSheetBackGroundColor
+        view.bottomSheetBackGroundColor = .systemGray5
         view.barViewColor = .bottomSheetBarViewColor
         view.bottomSheetContentViewColor = .bottomSheetContentBackGroundColor
         
@@ -36,6 +36,20 @@ final class DustViewController: UIViewController {
         let imageView = UIImageView()
         
         return imageView
+    }()
+    
+    private lazy var airPollutionTextLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16.0, weight: .light)
+        
+        return label
+    }()
+    
+    private lazy var airPollutionConditionTextLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 22.0, weight: .semibold)
+        
+        return label
     }()
     
     private lazy var citynameLabel: UILabel = {
@@ -78,7 +92,7 @@ extension DustViewController: CLLocationManagerDelegate {
 private extension DustViewController {
     
     func setupLayout() {
-        [backgroundView, charImageView, airPollutionValueLabel].forEach { view.addSubview($0) }
+        [backgroundView, airPollutionTextLabel, airPollutionConditionTextLabel, charImageView, airPollutionValueLabel].forEach { view.addSubview($0) }
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -87,10 +101,22 @@ private extension DustViewController {
             $0.trailing.equalToSuperview()
         }
         
+        airPollutionTextLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(100.0)
+            $0.centerX.equalToSuperview()
+        }
+        
+        airPollutionConditionTextLabel.snp.makeConstraints {
+            $0.top.equalTo(airPollutionTextLabel.snp.bottom).offset(4.0)
+            $0.centerX.equalToSuperview()
+        }
+        
+        let charImageViewScaleSize: Double = 450.0
+        
         charImageView.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.width.equalTo(500)
-            $0.height.equalTo(500)
+            $0.width.equalTo(charImageViewScaleSize)
+            $0.height.equalTo(charImageViewScaleSize)
         }
         
         airPollutionValueLabel.snp.makeConstraints {
@@ -105,10 +131,18 @@ private extension DustViewController {
                 self.airPollutonData = airPollutonValueData
                 
                 DispatchQueue.main.async {
-                    let airPollutonValueData = lroundl(self.airPollutonData[0].components["pm10"] ?? 0)
+                    let airPollutonValueData = Int(lroundl(self.airPollutonData[0].components["pm10"] ?? 0))
+                    
+                    print(airPollutonValueData)
+                   
+                    self.bottomSheetView.airPollutonValueDataLabel.text = "\(airPollutonValueData)㎍/㎥"
+                    UILabel().changeTextWeightSpecificRange(label: self.bottomSheetView.airPollutonValueDataLabel, fontSize: 16.0, fontWeight: UIFont.Weight.semibold, range: "㎍/㎥")
+                    
                     self.backgroundView.backgroundColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
                     self.charImageView.image = self.currentAirPollutionStatus(airPollutonValueData).characterImageSet
+                    self.airPollutionTextLabel.text = "미세먼지"
+                    self.airPollutionConditionTextLabel.text = self.currentAirPollutionStatus(airPollutonValueData).statusTextLabel
                     
                     self.view.addSubview(self.bottomSheetView)
                     self.bottomSheetView.snp.makeConstraints {

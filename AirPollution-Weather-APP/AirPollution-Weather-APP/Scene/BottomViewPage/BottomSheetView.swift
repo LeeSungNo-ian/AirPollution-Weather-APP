@@ -11,12 +11,10 @@ import SnapKit
 import CoreLocation
 
 final class BottomSheetView: PassThroughView {
-
+    
     var networkManager = NetworkManager()
-    var weatherData: Temp!
-
-    let locationManager = CLLocationManager()
-
+    var airPollutonData: [List]!
+        
     var currentCityName: String = "" {
         didSet {
             citynameLabel.text = "현재 \(currentCityName) 온도"
@@ -54,21 +52,20 @@ final class BottomSheetView: PassThroughView {
         return view
     }()
     
-    private lazy var weatherDataContentView: UIView = {
+    private lazy var airPollutionDataContentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .bottomSheetBackGroundColor
+        view.backgroundColor = .systemGray5
         view.layer.cornerRadius = 6
         view.clipsToBounds = true
-
+        
         return view
     }()
     
-    lazy var tempLabel: UILabel = {
+    lazy var airPollutonValueDataLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18.0, weight: .semibold)
+        label.font = .systemFont(ofSize: 22.0, weight: .medium)
         label.textColor = .lightGray
-        label.text = "30°"
-        
+
         return label
     }()
     
@@ -77,18 +74,6 @@ final class BottomSheetView: PassThroughView {
         view.isUserInteractionEnabled = false
         
         return view
-    }()
-    
-    private let inputCityNametextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "검색할 도시를 입력해주세요"
-        textField.font = UIFont.systemFont(ofSize: 14)
-        textField.textColor = .lightGray
-        textField.backgroundColor = .textFieldBackGroundColor
-        textField.layer.borderColor = UIColor.red.cgColor
-        textField.layer.cornerRadius = 8.0
-        
-        return textField
     }()
     
     lazy var citynameLabel: UILabel = {
@@ -101,7 +86,7 @@ final class BottomSheetView: PassThroughView {
     
     private lazy var bottomContentView: UIView = {
         let view = UIView()
-
+        
         return view
     }()
     
@@ -140,12 +125,6 @@ final class BottomSheetView: PassThroughView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupCityName()
-        setupNetworkDatas()
-        inputCityNametextField.addLeftPadding()
-    
-        inputCityNametextField.delegate = self
-        
         self.backgroundColor = .clear
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan))
         self.addGestureRecognizer(panGesture)
@@ -155,12 +134,11 @@ final class BottomSheetView: PassThroughView {
         self.bottomSheetView.clipsToBounds = true
         
         self.addSubview(self.bottomSheetView)
-        self.addSubview(self.weatherDataContentView)
+        self.addSubview(self.airPollutionDataContentView)
         
-        self.weatherDataContentView.addSubview(tempLabel)
+        self.airPollutionDataContentView.addSubview(airPollutonValueDataLabel)
         
         self.bottomSheetView.addSubview(self.barView)
-        self.bottomSheetView.addSubview(self.inputCityNametextField)
         self.bottomSheetView.addSubview(self.citynameLabel)
         self.bottomSheetView.addSubview(self.bottomContentView)
         
@@ -169,11 +147,11 @@ final class BottomSheetView: PassThroughView {
             $0.top.equalTo(Const.bottomSheetYPosition(.tip))
         }
         
-        self.weatherDataContentView.snp.makeConstraints {
+        self.airPollutionDataContentView.snp.makeConstraints {
             $0.bottom.equalTo(barView.snp.top).offset(-20.0)
             $0.trailing.equalToSuperview().inset(16.0)
-            $0.height.equalTo(40.0)
-            $0.width.equalTo(60.0)
+            $0.height.equalTo(50.0)
+            $0.width.equalTo(80.0)
         }
         
         self.barView.layer.cornerRadius = 2.5
@@ -185,16 +163,9 @@ final class BottomSheetView: PassThroughView {
             $0.size.equalTo(Const.barViewSize)
         }
         
-        self.inputCityNametextField.snp.makeConstraints {
-            $0.top.equalTo(barView.snp.bottom).offset(8.0)
-            $0.leading.equalTo(bottomSheetView.snp.leading).inset(16.0)
-            $0.trailing.equalTo(bottomSheetView.snp.trailing).inset(16.0)
-            $0.height.equalTo(32.0)
-        }
-        
         self.citynameLabel.snp.makeConstraints {
-            $0.top.equalTo(inputCityNametextField.snp.bottom).offset(24.0)
-            $0.leading.equalTo(inputCityNametextField)
+            $0.top.equalTo(barView.snp.bottom).offset(24.0)
+            $0.leading.equalToSuperview().offset(16.0)
         }
         
         self.bottomContentView.layer.cornerRadius = 10
@@ -203,12 +174,12 @@ final class BottomSheetView: PassThroughView {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(citynameLabel.snp.bottom).offset(12.0)
             $0.leading.equalTo(citynameLabel)
-            $0.trailing.equalTo(inputCityNametextField)
-            $0.height.equalTo(200)
+            $0.trailing.equalToSuperview().inset(16.0)
+            $0.height.equalTo(200.0)
         }
         
-        self.tempLabel.snp.makeConstraints {
-            $0.center.equalTo(weatherDataContentView.snp.center)
+        self.airPollutonValueDataLabel.snp.makeConstraints {
+            $0.center.equalTo(airPollutionDataContentView.snp.center)
         }
     }
     
@@ -250,75 +221,5 @@ final class BottomSheetView: PassThroughView {
             $0.left.right.bottom.equalToSuperview()
             $0.top.equalToSuperview().inset(offset)
         }
-    }
-        
-    func setupNetworkDatas() {
-        networkManager.fetchWeatherData { result in
-            switch result {
-            case Result.success(let weatherValueData):
-                self.weatherData = weatherValueData
-                
-                DispatchQueue.main.async {
-                    let weatherValueData = self.weatherData.temp - 273.15
-                    self.tempLabel.text = "\(Int(round(weatherValueData)))°"
-                }
-                
-            case Result.failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-}
-
-extension BottomSheetView: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.mode = Mode.full
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let cityName = self.inputCityNametextField.text {
-            networkManager.fetchSearchingWeatherData(cityName: cityName) { result in
-                switch result {
-                case Result.success(let weatherValueData):
-                    self.weatherData = weatherValueData
-                    
-                    DispatchQueue.main.async {
-                        let weatherValueData = self.weatherData.temp - 273.15
-                        self.tempLabel.text = "\(Int(round(weatherValueData)))°C"
-                    }
-                
-                case Result.failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
-        }
-        
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func setupCityName() {
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        
-        guard let currentLatitude = locationManager.location?.coordinate.latitude else { return }
-        guard let currentLongitude = locationManager.location?.coordinate.longitude else { return }
-        
-        networkManager.weatherDataURL = "https://api.openweathermap.org/data/2.5/weather?lat=\(currentLatitude)&lon=\(currentLongitude)&appid="
-    }
-}
-
-extension BottomSheetView: CLLocationManagerDelegate {
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations.first
-        
-        let latitude = location?.coordinate.latitude
-        let longitude = location?.coordinate.longitude
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("error \(error.localizedDescription)")
     }
 }
