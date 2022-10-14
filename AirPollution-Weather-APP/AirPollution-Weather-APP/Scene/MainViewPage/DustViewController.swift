@@ -16,10 +16,10 @@ final class DustViewController: UIViewController {
     var airPollutonData: [List]!
         
     let locationManager = CLLocationManager()
-    
+        
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
-        view.bottomSheetBackGroundColor = .bottomSheetBackGroundColor
+        view.bottomSheetBackGroundColor = .systemGray5
         view.barViewColor = .bottomSheetBarViewColor
         view.bottomSheetContentViewColor = .bottomSheetContentBackGroundColor
         
@@ -131,7 +131,13 @@ private extension DustViewController {
                 self.airPollutonData = airPollutonValueData
                 
                 DispatchQueue.main.async {
-                    let airPollutonValueData = lroundl(self.airPollutonData[0].components["pm10"] ?? 0)
+                    let airPollutonValueData = Int(lroundl(self.airPollutonData[0].components["pm10"] ?? 0))
+                    
+                    print(airPollutonValueData)
+                   
+                    self.bottomSheetView.airPollutonValueDataLabel.text = "\(airPollutonValueData)㎍/㎥"
+                    UILabel().changeTextWeightSpecificRange(label: self.bottomSheetView.airPollutonValueDataLabel, fontSize: 16.0, fontWeight: UIFont.Weight.semibold, range: "㎍/㎥")
+                    
                     self.backgroundView.backgroundColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
                     self.charImageView.image = self.currentAirPollutionStatus(airPollutonValueData).characterImageSet

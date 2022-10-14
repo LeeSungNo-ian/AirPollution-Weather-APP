@@ -24,7 +24,6 @@ extension UIColor {
     class var airPollutionBadColor: UIColor { UIColor(hex: 0xFECB2E) }
     class var airPollutionVeryBadColor: UIColor { UIColor(hex: 0xFC3D39) }
     
-    class var bottomSheetBackGroundColor: UIColor { UIColor(hex: 0x252629) }
     class var bottomSheetBarViewColor: UIColor { UIColor(hex: 0x606166) }
     class var bottomSheetContentBackGroundColor: UIColor { UIColor(hex: 0x2C2C2D) }
     class var textFieldBackGroundColor: UIColor { UIColor(hex: 0x383A3E) }
