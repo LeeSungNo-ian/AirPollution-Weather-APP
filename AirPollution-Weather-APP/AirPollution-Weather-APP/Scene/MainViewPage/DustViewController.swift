@@ -17,8 +17,9 @@ final class DustViewController: UIViewController {
         
     let locationManager = CLLocationManager()
     
-    var currentLatitude: Double = 0.0
-    var currentLongitude: Double = 0.0
+    var currentLatitude: Double = 0
+    var currentLongitude: Double = 0
+    var isAuth: Bool = false
         
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
@@ -65,12 +66,40 @@ final class DustViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         networkManager = NetworkManager()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
         
-        setupCityName()
+        currentLatitude = locationManager.location?.coordinate.latitude ?? 0.0
+        currentLongitude = locationManager.location?.coordinate.longitude ?? 0.0
+        
+        requestGPSPermission()
         setupLayout()
+        setupCityName()
+
         setupNetworkDatas()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            if self.isAuth {
+                
+            } else {
+                let sheet = UIAlertController(title: "위치 정보 동의", message: "앱을 사용 편의성을 위해 '앱을 사용하는 동안 허용' 을 설정해주세요", preferredStyle: .alert)
+                
+                sheet.addAction(UIAlertAction(title: "아니요", style: .destructive, handler: { _ in
+                    self.viewDidLoad()
+                }))
+                
+                sheet.addAction(UIAlertAction(title: "예", style: .default) { _ in
+                    UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
+                    self.viewDidLoad()
+                })
+                
+                self.present(sheet, animated: true)
+            }
+        }
     }
 }
 
@@ -117,6 +146,25 @@ private extension DustViewController {
         }
     }
     
+    func requestGPSPermission(){
+        DispatchQueue.main.async {
+            switch CLLocationManager.authorizationStatus() {
+            case .authorizedAlways, .authorizedWhenInUse:
+                print("GPS: 권한 있음")
+                self.isAuth = true
+            case .restricted, .notDetermined:
+                print("GPS: 아직 선택하지 않음")
+                self.isAuth = false
+            case .denied:
+                print("GPS: 권한 없음")
+                self.isAuth = false
+            default:
+                print("GPS: Default")
+                self.isAuth = false
+            }
+        }
+    }
+
     func setupNetworkDatas() {
         networkManager.fetchAirPollutionData { result in
             switch result {
@@ -127,11 +175,12 @@ private extension DustViewController {
                     let airPollutonValueData = Int(lroundl(self.airPollutonData[0].components["pm10"] ?? 0))
                     
                     if self.currentLatitude == 0 {
+                        print("🤓")
                         self.view.backgroundColor = AirPollutionDataStatus.nothing.statusColor
                         self.charImageView.image = AirPollutionDataStatus.nothing.characterImageSet
                         self.airPollutionTextLabel.text = ""
-                        self.airPollutionConditionTextLabel.text = "사용자의 위치를 받아올 수 없어요!"
-                        
+                        self.airPollutionConditionTextLabel.text = "'앱을 사용하는 동안 허용'을 설정해주세요!"
+
                         self.view.addSubview(self.bottomSheetView)
                         self.bottomSheetView.snp.makeConstraints {
                           $0.edges.equalToSuperview()
@@ -180,13 +229,6 @@ private extension DustViewController {
     }
     
     func setupCityName() {
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        
-        self.currentLatitude = locationManager.location?.coordinate.latitude ?? 0.0
-        self.currentLongitude = locationManager.location?.coordinate.longitude ?? 0.0
-        
         networkManager.airPollutionURL = "https://api.openweathermap.org/data/2.5/air_pollution?lat=\(currentLatitude)&lon=\(currentLongitude)&appid="
         
         let findLocation = CLLocation(latitude: currentLatitude, longitude: currentLongitude)
@@ -195,9 +237,12 @@ private extension DustViewController {
         geocoder.reverseGeocodeLocation(findLocation, preferredLocale: locale, completionHandler: {(placemarks, error) in
             if let address: [CLPlacemark] = placemarks {
                 sleep(1)
-                
+                print(self.currentLatitude)
+                print("❤️")
                 self.bottomSheetView.currentCityName = String(address.last?.locality ?? "")
-                self.bottomSheetView.currentLocateWebViewURLString = "https://waqi.info/#/c/\(self.currentLatitude)/\(self.currentLongitude)/11z"
+                if self.currentLatitude != 0 {
+                    self.bottomSheetView.currentLocateWebViewURLString = "https://waqi.info/#/c/\(self.currentLatitude)/\(self.currentLongitude)/11z"
+                }
             }
         })
     }
