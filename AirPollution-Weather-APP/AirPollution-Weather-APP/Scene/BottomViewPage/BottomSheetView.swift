@@ -18,7 +18,7 @@ final class BottomSheetView: PassThroughView {
         
     var currentCityName: String = "" {
         didSet {
-            citynameLabel.text = "\(currentCityName) 주변의 미세먼지 농도"
+            citynameLabel.text = DustViewController().currentLatitude != 0.0 ? "\(currentCityName) 주변의 미세먼지 농도" : "도시를 찾지 못했어요!"
         }
     }
     

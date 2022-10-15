@@ -12,10 +12,13 @@ import CoreLocation
 
 final class DustViewController: UIViewController {
 
-    var networkManager = NetworkManager()
+    var networkManager: NetworkManager!
     var airPollutonData: [List]!
         
     let locationManager = CLLocationManager()
+    
+    var currentLatitude: Double = 0.0
+    var currentLongitude: Double = 0.0
         
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
@@ -24,13 +27,7 @@ final class DustViewController: UIViewController {
         
         return view
     }()
-    
-    private lazy var backgroundView: UIView = {
-        let backgroundView = UIView()
-        
-        return backgroundView
-    }()
-    
+
     private lazy var charImageView: UIImageView = {
         let imageView = UIImageView()
         
@@ -69,10 +66,11 @@ final class DustViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        networkManager = NetworkManager()
+        
         setupCityName()
         setupLayout()
         setupNetworkDatas()
-        requestGPSPermission()
     }
 }
 
@@ -99,15 +97,8 @@ private extension DustViewController {
         airPollutionTextStackView.alignment = .center
         airPollutionTextStackView.axis = .vertical
         
-        [backgroundView, charImageView, airPollutionTextStackView, airPollutionValueLabel].forEach { view.addSubview($0) }
-        
-        backgroundView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.leading.equalToSuperview()
-            $0.trailing.equalToSuperview()
-        }
-        
+        [charImageView, airPollutionTextStackView, airPollutionValueLabel].forEach { view.addSubview($0) }
+ 
         airPollutionTextStackView.snp.makeConstraints {
             $0.top.equalTo(charImageView.snp.top).inset(-80.0)
             $0.centerX.equalToSuperview()
@@ -140,7 +131,7 @@ private extension DustViewController {
                     self.bottomSheetView.airPollutonValueDataLabel.text = "\(airPollutonValueData)㎍/㎥"
                     UILabel().changeTextWeightSpecificRange(label: self.bottomSheetView.airPollutonValueDataLabel, fontSize: 16.0, fontWeight: UIFont.Weight.semibold, range: "㎍/㎥")
                     
-                    self.backgroundView.backgroundColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
+                    self.view.backgroundColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
                     self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
                     self.charImageView.image = self.currentAirPollutionStatus(airPollutonValueData).characterImageSet
                     self.airPollutionTextLabel.text = "미세먼지"
@@ -178,26 +169,13 @@ private extension DustViewController {
         view.addSubview(visualEffectView)
     }
     
-    func requestGPSPermission(){
-        switch CLLocationManager.authorizationStatus() {
-        case .authorizedAlways, .authorizedWhenInUse:
-            print("GPS: 권한 있음")
-        case .restricted, .notDetermined:
-            print("GPS: 아직 선택하지 않음")
-        case .denied:
-            print("GPS: 권한 없음")
-        default:
-            print("GPS: Default")
-        }
-    }
-    
     func setupCityName() {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
-        guard let currentLatitude = locationManager.location?.coordinate.latitude else { return }
-        guard let currentLongitude = locationManager.location?.coordinate.longitude else { return }
+        self.currentLatitude = locationManager.location?.coordinate.latitude ?? 0.0
+        self.currentLongitude = locationManager.location?.coordinate.longitude ?? 0.0
         
         networkManager.airPollutionURL = "https://api.openweathermap.org/data/2.5/air_pollution?lat=\(currentLatitude)&lon=\(currentLongitude)&appid="
         
@@ -207,14 +185,10 @@ private extension DustViewController {
         geocoder.reverseGeocodeLocation(findLocation, preferredLocale: locale, completionHandler: {(placemarks, error) in
             if let address: [CLPlacemark] = placemarks {
                 sleep(1)
-                self.citynameLabel.text = "\(String(address.last?.locality ?? "잘못된 도시 이름이에요.")) 미세먼지 농도는"
-                self.citynameLabel.textColor = .white
-                UILabel().changeTextWeightSpecificRange(label: self.citynameLabel, fontSize: 24.0, fontWeight: UIFont.Weight.regular, range: "미세먼지 농도는")
                 
-                self.bottomSheetView.currentCityName = String(address.last?.locality ?? "잘못된 도시 이름이에요.")
-                self.bottomSheetView.currentLocateWebViewURLString = "https://waqi.info/#/c/\(currentLatitude)/\(currentLongitude)/11z"
+                self.bottomSheetView.currentCityName = String(address.last?.locality ?? "")
+                self.bottomSheetView.currentLocateWebViewURLString = "https://waqi.info/#/c/\(self.currentLatitude)/\(self.currentLongitude)/11z"
             }
-        }
-        )
+        })
     }
 }
