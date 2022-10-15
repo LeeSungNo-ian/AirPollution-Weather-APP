@@ -18,11 +18,11 @@ final class BottomSheetView: PassThroughView {
         
     var currentCityName: String = "" {
         didSet {
-            citynameLabel.text = DustViewController().currentLatitude != 0.0 ? "\(currentCityName) 주변의 미세먼지 농도" : "도시를 찾지 못했어요!"
+            citynameLabel.text = currentCityName != "" ? "\(currentCityName) 주변의 미세먼지 농도" : "도시를 찾는 중 입니다!"
         }
     }
     
-    var currentLocateWebViewURLString: String = "" {
+    var currentLocateWebViewURLString: String = "https://waqi.info/#/c/0/0/11z" {
         didSet {
             currentLocateWebViewURL = URL(string: currentLocateWebViewURLString)!
             let request: URLRequest = URLRequest(url: currentLocateWebViewURL)

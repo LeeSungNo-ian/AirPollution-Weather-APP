@@ -411,8 +411,9 @@
 				DEVELOPMENT_TEAM = HD34Q2YK79;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AirPollution-Weather-APP/Info.plist";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to get the current weather for where you are.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to get the current weather for where you are.";
+				INFOPLIST_KEY_CFBundleDisplayName = "뿌앵이";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "미세먼지 측정을 하기 위해 사용자 위치 정보를 사용하시겠습니까?";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "미세먼지 측정을 하기 위해 사용자 위치 정보를 사용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -444,8 +445,9 @@
 				DEVELOPMENT_TEAM = HD34Q2YK79;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AirPollution-Weather-APP/Info.plist";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to get the current weather for where you are.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to get the current weather for where you are.";
+				INFOPLIST_KEY_CFBundleDisplayName = "뿌앵이";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "미세먼지 측정을 하기 위해 사용자 위치 정보를 사용하시겠습니까?";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "미세먼지 측정을 하기 위해 사용자 위치 정보를 사용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
