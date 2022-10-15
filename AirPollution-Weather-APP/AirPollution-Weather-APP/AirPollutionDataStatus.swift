@@ -12,6 +12,7 @@ enum AirPollutionDataStatus: String {
     case good
     case bad
     case veryBad
+    case nothing
     
     var statusTextLabel: String {
         switch self {
@@ -19,6 +20,7 @@ enum AirPollutionDataStatus: String {
         case .good: return "좋지도, 나쁘지도 않은 공기에요."
         case .bad: return "공기가 탁해요.."
         case .veryBad: return "마스크 없으면 나오지도 말기.."
+        case .nothing: return "위치 권한을 허용해주세요!"
         }
     }
 
@@ -28,6 +30,7 @@ enum AirPollutionDataStatus: String {
         case .good: return .airPollutionGoodColor
         case .bad: return .airPollutionBadColor
         case .veryBad: return .airPollutionVeryBadColor
+        case .nothing: return .black
         }
     }
     
@@ -37,6 +40,7 @@ enum AirPollutionDataStatus: String {
         case .good: return 0.2
         case .bad: return 0.75
         case .veryBad: return 1.0
+        case .nothing: return 0.0
         }
     }
     
@@ -46,6 +50,7 @@ enum AirPollutionDataStatus: String {
         case .good: return UIImage(named: "AirPollutionGood")!
         case .bad: return UIImage(named: "AirPollutionBad")!
         case .veryBad: return UIImage(named: "AirPollutionVeryBad")!
+        case .nothing: return UIImage(named: "AirPollutionNothing")!
         }
     }
 }
