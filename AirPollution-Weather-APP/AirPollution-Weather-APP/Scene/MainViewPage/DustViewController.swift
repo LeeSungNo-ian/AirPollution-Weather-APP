@@ -126,20 +126,30 @@ private extension DustViewController {
                 DispatchQueue.main.async {
                     let airPollutonValueData = Int(lroundl(self.airPollutonData[0].components["pm10"] ?? 0))
                     
-                    print(airPollutonValueData)
-                   
-                    self.bottomSheetView.airPollutonValueDataLabel.text = "\(airPollutonValueData)㎍/㎥"
-                    UILabel().changeTextWeightSpecificRange(label: self.bottomSheetView.airPollutonValueDataLabel, fontSize: 16.0, fontWeight: UIFont.Weight.semibold, range: "㎍/㎥")
-                    
-                    self.view.backgroundColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
-                    self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
-                    self.charImageView.image = self.currentAirPollutionStatus(airPollutonValueData).characterImageSet
-                    self.airPollutionTextLabel.text = "미세먼지"
-                    self.airPollutionConditionTextLabel.text = self.currentAirPollutionStatus(airPollutonValueData).statusTextLabel
-                    
-                    self.view.addSubview(self.bottomSheetView)
-                    self.bottomSheetView.snp.makeConstraints {
-                      $0.edges.equalToSuperview()
+                    if self.currentLatitude == 0 {
+                        self.view.backgroundColor = AirPollutionDataStatus.nothing.statusColor
+                        self.charImageView.image = AirPollutionDataStatus.nothing.characterImageSet
+                        self.airPollutionTextLabel.text = ""
+                        self.airPollutionConditionTextLabel.text = "사용자의 위치를 받아올 수 없어요!"
+                        
+                        self.view.addSubview(self.bottomSheetView)
+                        self.bottomSheetView.snp.makeConstraints {
+                          $0.edges.equalToSuperview()
+                        }
+                    } else {
+                        self.bottomSheetView.airPollutonValueDataLabel.text = "\(airPollutonValueData)㎍/㎥"
+                        UILabel().changeTextWeightSpecificRange(label: self.bottomSheetView.airPollutonValueDataLabel, fontSize: 16.0, fontWeight: UIFont.Weight.semibold, range: "㎍/㎥")
+                        
+                        self.view.backgroundColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
+                        self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
+                        self.charImageView.image = self.currentAirPollutionStatus(airPollutonValueData).characterImageSet
+                        self.airPollutionTextLabel.text = "미세먼지"
+                        self.airPollutionConditionTextLabel.text = self.currentAirPollutionStatus(airPollutonValueData).statusTextLabel
+                        
+                        self.view.addSubview(self.bottomSheetView)
+                        self.bottomSheetView.snp.makeConstraints {
+                          $0.edges.equalToSuperview()
+                        }
                     }
                 }
             
