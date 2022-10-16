@@ -21,5 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
     
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        exit(0)
+    }
 }
 
