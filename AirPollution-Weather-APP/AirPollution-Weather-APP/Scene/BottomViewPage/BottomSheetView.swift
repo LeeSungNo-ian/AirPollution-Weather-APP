@@ -20,38 +20,28 @@ final class BottomSheetView: PassThroughView {
     @ObservedObject var currentLocationModelManager = CurrentLocationModel.shared
     var cancelBag = Set<AnyCancellable>()
     
-    var currentLocateWebViewURLString: String = "https://waqi.info/#/c/0/0/11z" {
-        didSet {
-            currentLocateWebViewURL = URL(string: currentLocateWebViewURLString)!
-            let request: URLRequest = URLRequest(url: currentLocateWebViewURL)
-            webView.load(request as URLRequest)
-        }
-    }
+    var currentLocateWebViewURLString: String = "https://waqi.info/#/c/0/0/11z"
     
     var currentLocateWebViewURL: URL = URL(string:"http://t1.daumcdn.net/thumb/R600x0/?fname=http%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F4b035cdf8372d67108f7e8d339660479dfb41bbd")!
     
-    enum Mode {
-        case tip
-        case full
+    var mode: BottomSheetMode = .tip {
+        didSet {
+            switch self.mode {
+            case .tip:
+                break
+            case .full:
+                break
+            }
+            self.updateConstraint(offset: BottomSheetConstraint.bottomSheetYPosition(self.mode))
+        }
     }
     
-    private enum Const {
-        static let duration = 0.5
-        static let cornerRadius = 12.0
-        static let barViewTopSpacing = 5.0
-        static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.09, height: 5.0)
-        static let bottomSheetRatio: (Mode) -> Double = { mode in
-            switch mode {
-            case .tip:
-                return 0.9 // 값이 클수록 BottomSheet의 길이가 줄어든다
-            case .full:
-                return 0.2 // 값이 커질 수록 뷰는 밑으로 내려간다
-            }
-        }
-        
-        static let bottomSheetYPosition: (Mode) -> Double = { mode in
-            Self.bottomSheetRatio(mode) * UIScreen.main.bounds.height
-        }
+    var bottomSheetBackGroundColor: UIColor? {
+        didSet { self.bottomSheetView.backgroundColor = self.bottomSheetBackGroundColor }
+    }
+    
+    var barViewColor: UIColor? {
+        didSet { self.barView.backgroundColor = self.barViewColor }
     }
     
     // MARK: UI
@@ -74,7 +64,7 @@ final class BottomSheetView: PassThroughView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 22.0, weight: .medium)
         label.textColor = .lightGray
-
+        
         return label
     }()
     
@@ -87,7 +77,7 @@ final class BottomSheetView: PassThroughView {
     
     lazy var citynameLabel: UILabel = {
         let label = UILabel()
-        label.text = "sjkfljlsjfl"
+        label.text = "임의의 값을 나타냅니다."
         label.font = .systemFont(ofSize: 18.0, weight: .medium)
         label.textColor = .lightGray
         
@@ -100,53 +90,86 @@ final class BottomSheetView: PassThroughView {
         return webView
     }()
     
-    // MARK: Properties
-    var mode: Mode = .tip {
-        didSet {
-            switch self.mode {
-            case .tip:
-                break
-            case .full:
-                break
-            }
-            self.updateConstraint(offset: Const.bottomSheetYPosition(self.mode))
-        }
-    }
-    
-    var bottomSheetBackGroundColor: UIColor? {
-        didSet { self.bottomSheetView.backgroundColor = self.bottomSheetBackGroundColor }
-    }
-    
-    var barViewColor: UIColor? {
-        didSet { self.barView.backgroundColor = self.barViewColor }
-    }
-
-    // MARK: Initializer
-    @available(*, unavailable)
-    
     required init?(coder: NSCoder) {
         fatalError("init() has not been implemented")
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-                print("👍")
+        
+        setupLayout()
+        fetchCurrentLotationData()
+        fetchMapKitData()
+    }
+}
+
+private extension BottomSheetView {
+    
+    private func updateConstraint(offset: Double) {
+        self.bottomSheetView.snp.remakeConstraints {
+            $0.left.right.bottom.equalToSuperview()
+            $0.top.equalToSuperview().inset(offset)
+        }
+    }
+    
+    func fetchCurrentLotationData() {
         self.currentLocationModelManager.$currentLocationCity
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] _ in
                 
-                self!.citynameLabel.text = self!.currentLocationModelManager.currentLocationCity
+                self!.citynameLabel.text = "\(self!.currentLocationModelManager.currentLocationCity) 주변의 미세먼지 농도"
                 self!.currentLocateWebViewURLString = "https://waqi.info/#/c/\(self!.currentLocationModelManager.currentLatitude)/\(self!.currentLocationModelManager.currentLongitude)/11z"
-                print("👍")
             })
             .store(in: &self.cancelBag)
+    }
+    
+    func fetchMapKitData() {
+        let request: URLRequest = URLRequest(url: currentLocateWebViewURL)
+        webView.load(request as URLRequest)
+    }
+    
+    @objc private func didPan(_ recognizer: UIPanGestureRecognizer) {
+        let translationY = recognizer.translation(in: self).y
+        let minY = self.bottomSheetView.frame.minY
+        let offset = translationY + minY
         
+        if BottomSheetConstraint.bottomSheetYPosition(.full)...BottomSheetConstraint.bottomSheetYPosition(.tip) ~= offset {
+            self.updateConstraint(offset: offset)
+            recognizer.setTranslation(.zero, in: self)
+        }
+        
+        UIView.animate(
+            withDuration: 0,
+            delay: 0,
+            options: .curveEaseOut,
+            animations: self.layoutIfNeeded,
+            completion: nil
+        )
+        
+        guard recognizer.state == .ended else { return }
+        
+        UIView.animate(
+            withDuration: BottomSheetConstraint.duration,
+            delay: 0,
+            options: .allowUserInteraction,
+            animations: {
+                // velocity를 이용하여 위로 스와이프인지, 아래로 스와이프인지 확인
+                self.mode = recognizer.velocity(in: self).y >= 0 ? BottomSheetMode.tip : .full
+            },
+            completion: nil
+        )
+    }
+}
+
+private extension BottomSheetView {
+    
+    func setupLayout() {
         self.backgroundColor = .clear
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan))
         self.addGestureRecognizer(panGesture)
         
         self.bottomSheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        self.bottomSheetView.layer.cornerRadius = Const.cornerRadius
+        self.bottomSheetView.layer.cornerRadius = BottomSheetConstraint.cornerRadius
         self.bottomSheetView.clipsToBounds = true
         
         self.addSubview(self.bottomSheetView)
@@ -160,7 +183,7 @@ final class BottomSheetView: PassThroughView {
         
         self.bottomSheetView.snp.makeConstraints {
             $0.left.right.bottom.equalToSuperview()
-            $0.top.equalTo(Const.bottomSheetYPosition(.tip))
+            $0.top.equalTo(BottomSheetConstraint.bottomSheetYPosition(.tip))
         }
         
         self.airPollutionDataContentView.snp.makeConstraints {
@@ -179,8 +202,8 @@ final class BottomSheetView: PassThroughView {
         
         self.barView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().inset(Const.barViewTopSpacing)
-            $0.size.equalTo(Const.barViewSize)
+            $0.top.equalToSuperview().inset(BottomSheetConstraint.barViewTopSpacing)
+            $0.size.equalTo(BottomSheetConstraint.barViewSize)
         }
         
         self.citynameLabel.snp.makeConstraints {
@@ -193,49 +216,6 @@ final class BottomSheetView: PassThroughView {
             $0.centerX.equalToSuperview()
             $0.width.equalTo(400.0)
             $0.height.equalTo(700.0)
-        }
-
-        let request: URLRequest = URLRequest(url: currentLocateWebViewURL)
-        webView.load(request as URLRequest)
-    }
-    
-    // MARK: Methods
-    @objc private func didPan(_ recognizer: UIPanGestureRecognizer) {
-        let translationY = recognizer.translation(in: self).y
-        let minY = self.bottomSheetView.frame.minY
-        let offset = translationY + minY
-        
-        if Const.bottomSheetYPosition(.full)...Const.bottomSheetYPosition(.tip) ~= offset {
-            self.updateConstraint(offset: offset)
-            recognizer.setTranslation(.zero, in: self)
-        }
-        
-        UIView.animate(
-            withDuration: 0,
-            delay: 0,
-            options: .curveEaseOut,
-            animations: self.layoutIfNeeded,
-            completion: nil
-        )
-        
-        guard recognizer.state == .ended else { return }
-        
-        UIView.animate(
-            withDuration: Const.duration,
-            delay: 0,
-            options: .allowUserInteraction,
-            animations: {
-                // velocity를 이용하여 위로 스와이프인지, 아래로 스와이프인지 확인
-                self.mode = recognizer.velocity(in: self).y >= 0 ? Mode.tip : .full
-            },
-            completion: nil
-        )
-    }
-    
-    private func updateConstraint(offset: Double) {
-        self.bottomSheetView.snp.remakeConstraints {
-            $0.left.right.bottom.equalToSuperview()
-            $0.top.equalToSuperview().inset(offset)
         }
     }
 }

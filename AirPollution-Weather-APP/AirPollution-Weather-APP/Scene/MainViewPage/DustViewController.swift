@@ -70,7 +70,7 @@ final class DustViewController: UIViewController {
         super.viewDidLoad()
         setupLayout()
         awaitingUIData()
-        fetchCurrentLatitudeData()
+        fetchCurrentLotationData()
         fetchCurrentAirPollutionValueData()
     }
     
@@ -95,6 +95,79 @@ final class DustViewController: UIViewController {
                 self.present(sheet, animated: true)
             }
         }
+    }
+}
+
+private extension DustViewController {
+    
+    func fetchCurrentLotationData() {
+        self.currentLocationModelManager.$currentLatitude
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] _ in
+                self!.networkManager.fectchData(coordinate: [self!.currentLocationModelManager.currentLatitude, self!.currentLocationModelManager.currentLongitude])
+            })
+            .store(in: &self.cancelBag)
+    }
+    
+    func fetchCurrentAirPollutionValueData() {
+        self.networkManager.$airPollutionValueData
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] _ in
+                self!.airPollutonData = self!.networkManager.airPollutionValueData
+                self!.receiveUIData()
+            })
+            .store(in: &self.cancelBag)
+    }
+    
+    func awaitingUIData() {
+        self.view.backgroundColor = AirPollutionDataStatus.nothing.statusColor
+        self.charImageView.image = AirPollutionDataStatus.nothing.characterImageSet
+        self.airPollutionTextLabel.text = ""
+        self.airPollutionConditionTextLabel.text = "'앱을 사용하는 동안 허용'을 설정해주세요!"
+        
+        self.view.addSubview(self.bottomSheetView)
+        self.bottomSheetView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+    
+    func receiveUIData() {
+        if !self.airPollutonData.isEmpty {
+            let airPollutonValueData = Int(lround(self.airPollutonData[0].components["pm10"] ?? 0))
+            self.bottomSheetView.airPollutonValueDataLabel.text = "\(airPollutonValueData)㎍/㎥"
+            UILabel().changeTextWeightSpecificRange(label: self.bottomSheetView.airPollutonValueDataLabel, fontSize: 16.0, fontWeight: UIFont.Weight.semibold, range: "㎍/㎥")
+            
+            self.view.backgroundColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
+            self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
+            self.charImageView.image = self.currentAirPollutionStatus(airPollutonValueData).characterImageSet
+            self.airPollutionTextLabel.text = "미세먼지"
+            self.airPollutionConditionTextLabel.text = self.currentAirPollutionStatus(airPollutonValueData).statusTextLabel
+            
+            self.view.addSubview(self.bottomSheetView)
+            self.bottomSheetView.snp.makeConstraints {
+                $0.edges.equalToSuperview()
+            }
+        }
+    }
+    
+    func currentAirPollutionStatus(_ airPollutionValue: Int) -> AirPollutionDataStatus {
+        if airPollutionValue <= 15 {
+            return AirPollutionDataStatus.veryGood
+        } else if airPollutionValue <= 35 {
+            return AirPollutionDataStatus.good
+        } else if airPollutionValue <= 75 {
+            return AirPollutionDataStatus.bad
+        } else {
+            return AirPollutionDataStatus.veryBad
+        }
+    }
+    
+    func setupBlurEffect(_ airPollutionValue: Double) {
+        let blurEffect = UIBlurEffect(style: .dark)
+        let visualEffectView = UIVisualEffectView(effect: blurEffect)
+        visualEffectView.alpha = airPollutionValue
+        visualEffectView.frame = view.frame
+        view.addSubview(visualEffectView)
     }
 }
 
@@ -125,75 +198,5 @@ private extension DustViewController {
         airPollutionValueLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
-    }
-    
-    func fetchCurrentLatitudeData() {
-        self.currentLocationModelManager.$currentLatitude
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] _ in
-                self!.networkManager.fectchData(coordinate: [self!.currentLocationModelManager.currentLatitude, self!.currentLocationModelManager.currentLongitude])
-            })
-            .store(in: &self.cancelBag)
-    }
-    
-    func fetchCurrentAirPollutionValueData() {
-        self.networkManager.$airPollutionValueData
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] _ in
-                self!.airPollutonData = self!.networkManager.airPollutionValueData
-                self!.receiveUIData()
-            })
-            .store(in: &self.cancelBag)
-    }
-    
-    func awaitingUIData() {
-            self.view.backgroundColor = AirPollutionDataStatus.nothing.statusColor
-            self.charImageView.image = AirPollutionDataStatus.nothing.characterImageSet
-            self.airPollutionTextLabel.text = ""
-            self.airPollutionConditionTextLabel.text = "'앱을 사용하는 동안 허용'을 설정해주세요!"
-            
-            self.view.addSubview(self.bottomSheetView)
-            self.bottomSheetView.snp.makeConstraints {
-                $0.edges.equalToSuperview()
-            }
-    }
-    
-    func receiveUIData() {
-        if !self.airPollutonData.isEmpty {
-            let airPollutonValueData = Int(lround(self.airPollutonData[0].components["pm10"] ?? 0))
-            self.bottomSheetView.airPollutonValueDataLabel.text = "\(airPollutonValueData)㎍/㎥"
-            UILabel().changeTextWeightSpecificRange(label: self.bottomSheetView.airPollutonValueDataLabel, fontSize: 16.0, fontWeight: UIFont.Weight.semibold, range: "㎍/㎥")
-            
-            self.view.backgroundColor = self.currentAirPollutionStatus(airPollutonValueData).statusColor
-            self.setupBlurEffect(self.currentAirPollutionStatus(airPollutonValueData).statusBlurAlpha)
-            self.charImageView.image = self.currentAirPollutionStatus(airPollutonValueData).characterImageSet
-            self.airPollutionTextLabel.text = "미세먼지"
-            self.airPollutionConditionTextLabel.text = self.currentAirPollutionStatus(airPollutonValueData).statusTextLabel
-            
-            self.view.addSubview(self.bottomSheetView)
-            self.bottomSheetView.snp.makeConstraints {
-                $0.edges.equalToSuperview()
-            }
-        }
-    }
-
-    func currentAirPollutionStatus(_ airPollutionValue: Int) -> AirPollutionDataStatus {
-        if airPollutionValue <= 15 {
-            return AirPollutionDataStatus.veryGood
-        } else if airPollutionValue <= 35 {
-            return AirPollutionDataStatus.good
-        } else if airPollutionValue <= 75 {
-            return AirPollutionDataStatus.bad
-        } else {
-            return AirPollutionDataStatus.veryBad
-        }
-    }
-    
-    func setupBlurEffect(_ airPollutionValue: Double) {
-        let blurEffect = UIBlurEffect(style: .dark)
-        let visualEffectView = UIVisualEffectView(effect: blurEffect)
-        visualEffectView.alpha = airPollutionValue
-        visualEffectView.frame = view.frame
-        view.addSubview(visualEffectView)
     }
 }
