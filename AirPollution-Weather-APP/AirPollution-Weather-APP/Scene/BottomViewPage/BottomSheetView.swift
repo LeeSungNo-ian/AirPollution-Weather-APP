@@ -20,25 +20,6 @@ final class BottomSheetView: PassThroughView {
     @ObservedObject var currentLocationModelManager = CurrentLocationModel.shared
     var cancelBag = Set<AnyCancellable>()
     
-//    var currentCityName: String = ""
-    
-//    var currentCityName: String = "" {
-//        didSet {
-//            citynameLabel.text = currentCityName != "" ? "\(currentCityName) 주변의 미세먼지 농도" : "도시를 찾는 중 입니다!"
-//        }
-//    }
-    
-//    self.networkManager.$airPollutionValueData
-//        .receive(on: DispatchQueue.main)
-//        .sink(receiveValue: { [weak self] _ in
-//
-//            self!.airPollutonData = self!.networkManager.airPollutionValueData
-//            self!.setupNetworkDatas()
-//            self?.isCheck = true
-//        })
-//        .store(in: &self.cancelBag)
-//
-    
     var currentLocateWebViewURLString: String = "https://waqi.info/#/c/0/0/11z" {
         didSet {
             currentLocateWebViewURL = URL(string: currentLocateWebViewURLString)!

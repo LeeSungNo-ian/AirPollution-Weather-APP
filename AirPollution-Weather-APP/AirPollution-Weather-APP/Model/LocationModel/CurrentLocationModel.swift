@@ -5,7 +5,7 @@
 //  Created by 이성노 on 2022/10/28.
 //
 
-import Foundation
+import UIKit
 import CoreLocation
 
 class CurrentLocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
@@ -15,7 +15,6 @@ class CurrentLocationModel: NSObject, ObservableObject, CLLocationManagerDelegat
     
     @Published var currentLatitude: Double = 0.0
     var currentLongitude: Double = 0.0
-    
     @Published var currentLocationCity: String = ""
     
     override init() {
@@ -24,8 +23,6 @@ class CurrentLocationModel: NSObject, ObservableObject, CLLocationManagerDelegat
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
-        
-//        requestGPSPermission()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -49,16 +46,20 @@ class CurrentLocationModel: NSObject, ObservableObject, CLLocationManagerDelegat
         print("error \(error.localizedDescription)")
     }
     
-    func requestGPSPermission() {
+    func requestGPSPermission(isAuth: Bool) -> Bool {
         switch CLLocationManager.authorizationStatus() {
-        case .authorizedAlways, .authorizedWhenInUse:
+        case .authorizedAlways, .authorizedWhenInUse, .restricted:
             print("GPS: 권한 있음")
-        case .restricted, .notDetermined:
+            return true
+        case .notDetermined:
             print("GPS: 아직 선택하지 않음")
+            return false
         case .denied:
             print("GPS: 권한 없음")
+            return false
         default:
             print("GPS: Default")
+            return false
         }
     }
 }

@@ -21,6 +21,7 @@ final class DustViewController: UIViewController {
     var cancelBag = Set<AnyCancellable>()
     
     var isCheck: Bool = false
+    var isAuth: Bool = false
     
     private let bottomSheetView: BottomSheetView = {
         let view = BottomSheetView()
@@ -69,45 +70,32 @@ final class DustViewController: UIViewController {
         super.viewDidLoad()
         setupLayout()
         awaitingUIData()
-        //        setupNetworkDatas()
-        
-        self.currentLocationModelManager.$currentLatitude
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] _ in
-                self!.networkManager.fectchData(coordinate: [self!.currentLocationModelManager.currentLatitude, self!.currentLocationModelManager.currentLongitude])
-            })
-            .store(in: &self.cancelBag)
-        
-        self.networkManager.$airPollutionValueData
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] _ in
-                
-                self!.airPollutonData = self!.networkManager.airPollutionValueData
-                self!.receiveUIData()
-            })
-            .store(in: &self.cancelBag)
+        fetchCurrentLatitudeData()
+        fetchCurrentAirPollutionValueData()
     }
     
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        DispatchQueue.main.async {
-    //            if self.isAuth {
-    //
-    //            } else {
-    //                let sheet = UIAlertController(title: "위치 정보 동의", message: "앱을 사용 편의성을 위해 '앱을 사용하는 동안 허용' 을 설정해주세요", preferredStyle: .alert)
-    //
-    //                sheet.addAction(UIAlertAction(title: "아니요", style: .destructive, handler: { _ in
-    //                    self.viewDidLoad()
-    //                }))
-    //
-    //                sheet.addAction(UIAlertAction(title: "예", style: .default) { _ in
-    //                    UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
-    //                    self.viewDidLoad()
-    //                })
-    //
-    //                self.present(sheet, animated: true)
-    //            }
-    //        }
-    //    }
+    override func viewWillAppear(_ animated: Bool) {
+        isAuth = currentLocationModelManager.requestGPSPermission(isAuth: isAuth)
+        
+        DispatchQueue.main.async {
+            if self.isAuth {
+
+            } else {
+                let sheet = UIAlertController(title: "위치 정보 동의", message: "앱 사용 편의성을 위해 '앱을 사용하는 동안 허용' 을 설정해주세요!", preferredStyle: .alert)
+
+                sheet.addAction(UIAlertAction(title: "아니요", style: .destructive, handler: { _ in
+                    self.currentLocationModelManager.locationManager.requestLocation()
+                }))
+
+                sheet.addAction(UIAlertAction(title: "예", style: .default) { _ in
+                    UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
+                    self.currentLocationModelManager.locationManager.requestLocation()
+                })
+
+                self.present(sheet, animated: true)
+            }
+        }
+    }
 }
 
 private extension DustViewController {
@@ -137,6 +125,25 @@ private extension DustViewController {
         airPollutionValueLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
+    }
+    
+    func fetchCurrentLatitudeData() {
+        self.currentLocationModelManager.$currentLatitude
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] _ in
+                self!.networkManager.fectchData(coordinate: [self!.currentLocationModelManager.currentLatitude, self!.currentLocationModelManager.currentLongitude])
+            })
+            .store(in: &self.cancelBag)
+    }
+    
+    func fetchCurrentAirPollutionValueData() {
+        self.networkManager.$airPollutionValueData
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] _ in
+                self!.airPollutonData = self!.networkManager.airPollutionValueData
+                self!.receiveUIData()
+            })
+            .store(in: &self.cancelBag)
     }
     
     func awaitingUIData() {
