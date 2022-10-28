@@ -6,21 +6,38 @@
 //
 
 import UIKit
+import SwiftUI
+import Combine
+import CoreLocation
 
 import SnapKit
-import CoreLocation
 import WebKit
 
 final class BottomSheetView: PassThroughView {
     
-    var networkManager = NetworkManager()
     var airPollutonData: [List]!
-        
-    var currentCityName: String = "" {
-        didSet {
-            citynameLabel.text = currentCityName != "" ? "\(currentCityName) 주변의 미세먼지 농도" : "도시를 찾는 중 입니다!"
-        }
-    }
+    
+    @ObservedObject var currentLocationModelManager = CurrentLocationModel.shared
+    var cancelBag = Set<AnyCancellable>()
+    
+//    var currentCityName: String = ""
+    
+//    var currentCityName: String = "" {
+//        didSet {
+//            citynameLabel.text = currentCityName != "" ? "\(currentCityName) 주변의 미세먼지 농도" : "도시를 찾는 중 입니다!"
+//        }
+//    }
+    
+//    self.networkManager.$airPollutionValueData
+//        .receive(on: DispatchQueue.main)
+//        .sink(receiveValue: { [weak self] _ in
+//
+//            self!.airPollutonData = self!.networkManager.airPollutionValueData
+//            self!.setupNetworkDatas()
+//            self?.isCheck = true
+//        })
+//        .store(in: &self.cancelBag)
+//
     
     var currentLocateWebViewURLString: String = "https://waqi.info/#/c/0/0/11z" {
         didSet {
@@ -89,6 +106,7 @@ final class BottomSheetView: PassThroughView {
     
     lazy var citynameLabel: UILabel = {
         let label = UILabel()
+        label.text = "sjkfljlsjfl"
         label.font = .systemFont(ofSize: 18.0, weight: .medium)
         label.textColor = .lightGray
         
@@ -131,6 +149,16 @@ final class BottomSheetView: PassThroughView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+                print("👍")
+        self.currentLocationModelManager.$currentLocationCity
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] _ in
+                
+                self!.citynameLabel.text = self!.currentLocationModelManager.currentLocationCity
+                self!.currentLocateWebViewURLString = "https://waqi.info/#/c/\(self!.currentLocationModelManager.currentLatitude)/\(self!.currentLocationModelManager.currentLongitude)/11z"
+                print("👍")
+            })
+            .store(in: &self.cancelBag)
         
         self.backgroundColor = .clear
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPan))

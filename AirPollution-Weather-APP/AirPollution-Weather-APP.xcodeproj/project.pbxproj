@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A10D763290C0CBC009DE4D9 /* CurrentLocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A10D762290C0CBC009DE4D9 /* CurrentLocationModel.swift */; };
 		0A145D7F28F9FED100590500 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A145D8128F9FED100590500 /* InfoPlist.strings */; };
 		0A2D1DAA28F3181C0065B6DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2D1DA928F3181C0065B6DC /* AppDelegate.swift */; };
 		0A2D1DAC28F3181C0065B6DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2D1DAB28F3181C0065B6DC /* SceneDelegate.swift */; };
@@ -23,11 +24,11 @@
 		0A7F98D628F3330600C1AB50 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98D528F3330600C1AB50 /* NetworkManager.swift */; };
 		0A7F98DB28F3349D00C1AB50 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DA28F3349D00C1AB50 /* APIKey.swift */; };
 		0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */; };
-		0A9EB1E728F4F83000975AF9 /* WeatherDataApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */; };
 		0A9EB1EA28F5332400975AF9 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9EB1E928F5332400975AF9 /* UITextField+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A10D762290C0CBC009DE4D9 /* CurrentLocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationModel.swift; sourceTree = "<group>"; };
 		0A145D8028F9FED100590500 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0A145D8228F9FF2600590500 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0A2D1DA628F3181C0065B6DC /* AirPollution-Weather-APP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AirPollution-Weather-APP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,7 +47,6 @@
 		0A7F98D528F3330600C1AB50 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		0A7F98DA28F3349D00C1AB50 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPollutionDataStatus.swift; sourceTree = "<group>"; };
-		0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataApiModel.swift; sourceTree = "<group>"; };
 		0A9EB1E928F5332400975AF9 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +62,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A10D764290C0DAA009DE4D9 /* LocationModel */ = {
+			isa = PBXGroup;
+			children = (
+				0A10D762290C0CBC009DE4D9 /* CurrentLocationModel.swift */,
+			);
+			path = LocationModel;
+			sourceTree = "<group>";
+		};
 		0A2D1D9D28F3181C0065B6DC = {
 			isa = PBXGroup;
 			children = (
@@ -82,13 +90,13 @@
 		0A2D1DA828F3181C0065B6DC /* AirPollution-Weather-APP */ = {
 			isa = PBXGroup;
 			children = (
-				0A2D1DA928F3181C0065B6DC /* AppDelegate.swift */,
-				0A2D1DAB28F3181C0065B6DC /* SceneDelegate.swift */,
+				0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */,
 				0A739EAF28F3690100E629E8 /* Extension */,
 				0A2D1DC128F330C50065B6DC /* Model */,
-				0A7F98DF28F3437900C1AB50 /* AirPollutionDataStatus.swift */,
 				0A7F98D228F3329D00C1AB50 /* Network */,
 				0A2D1DC028F324990065B6DC /* Scene */,
+				0A2D1DAB28F3181C0065B6DC /* SceneDelegate.swift */,
+				0A2D1DA928F3181C0065B6DC /* AppDelegate.swift */,
 				0A2D1DB228F3181D0065B6DC /* Assets.xcassets */,
 				0A2D1DB428F3181D0065B6DC /* LaunchScreen.storyboard */,
 				0A2D1DB728F3181D0065B6DC /* Info.plist */,
@@ -108,6 +116,7 @@
 		0A2D1DC128F330C50065B6DC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0A10D764290C0DAA009DE4D9 /* LocationModel */,
 				0A9EB1E828F4F83A00975AF9 /* API */,
 				0A7F98D728F3342E00C1AB50 /* APIKey */,
 			);
@@ -162,7 +171,6 @@
 			isa = PBXGroup;
 			children = (
 				0A7F98CF28F3310500C1AB50 /* AirPollutionApiModel.swift */,
-				0A9EB1E628F4F83000975AF9 /* WeatherDataApiModel.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -254,11 +262,11 @@
 				0A436ED428F4849E00DDE543 /* UILabel+.swift in Sources */,
 				0A7F98D028F3310500C1AB50 /* AirPollutionApiModel.swift in Sources */,
 				0A7F98E028F3437900C1AB50 /* AirPollutionDataStatus.swift in Sources */,
+				0A10D763290C0CBC009DE4D9 /* CurrentLocationModel.swift in Sources */,
 				0A9EB1EA28F5332400975AF9 /* UITextField+.swift in Sources */,
 				0A739EAE28F363BF00E629E8 /* BottomSheetView.swift in Sources */,
 				0A2D1DAC28F3181C0065B6DC /* SceneDelegate.swift in Sources */,
 				0A7F98D428F332B000C1AB50 /* NetworkError.swift in Sources */,
-				0A9EB1E728F4F83000975AF9 /* WeatherDataApiModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

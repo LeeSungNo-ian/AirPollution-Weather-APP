@@ -7,12 +7,29 @@
 
 import Foundation
 
-final class NetworkManager {
-    
+final class NetworkManager: ObservableObject {
+
     typealias AirPollutionNetworkCompletion = (Result<[List], NetworkError>) -> Void
-    typealias WeatherDataNetworkCompletion = (Result<Temp, NetworkError>) -> Void
     
+    static let shared = NetworkManager()
+
+    @Published var airPollutionValueData: [List] = []
+
     var airPollutionURL = ""
+
+    func fectchData(coordinate: [Double]) {
+        airPollutionURL = "https://api.openweathermap.org/data/2.5/air_pollution?lat=\(coordinate[0])&lon=\(coordinate[1])&appid="
+        
+        fetchAirPollutionData { result in
+            switch result {
+            case Result.success(let airPollutonValueData):
+                self.airPollutionValueData = airPollutonValueData
+                
+            case Result.failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
     
     func fetchAirPollutionData(completion: @escaping AirPollutionNetworkCompletion) {
         let urlString = self.airPollutionURL + APIKey().apiKey
